@@ -13,8 +13,17 @@ kinesis = session.client('kinesis', region_name='eu-west-1')
 # kinesis = boto3.client('kinesis', region_name='eu-west-1')
 
 stream = 'orderbook-stream'
-# See https://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetShardIterator.html#API_GetShardIterator_RequestSyntax
 
+# Kinesis shard request limit per second: 5, run at 250ms to stay on the safe side
+# Multiple consumer clusters should adjust this accordingly for shared shards
+# See limits: https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html
+frequency = 0.25
+
+# Kinesis shard record limit per second: 10000
+record_limit = int(10000 * frequency)
+
+# See iterator types:
+# https://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetShardIterator.html#API_GetShardIterator_RequestSyntax
 iterator_type = 'LATEST'
 timestamp = 0
 
@@ -26,12 +35,10 @@ shard_iterator = kinesis.get_shard_iterator(
 iterator = shard_iterator['ShardIterator']
 response = kinesis.get_records(ShardIterator=iterator, Limit=2)
 
+
+# Kinesis shard record limit per second is 10000
 while 'NextShardIterator' in response:
     response = kinesis.get_records(
-        ShardIterator=response['NextShardIterator'], Limit=10000)
+        ShardIterator=response['NextShardIterator'], Limit=record_limit)
     print(response)
-
-    # AWS Kinesis limit is 5 requests/second/shard, run at 250ms to stay on the safe side
-    # Multiple consumer clusters should adjust this accordingly
-    # See limits: https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html
-    time.sleep(0.25)
+    time.sleep(frequency)
