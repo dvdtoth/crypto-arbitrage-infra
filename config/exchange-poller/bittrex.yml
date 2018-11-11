@@ -1,0 +1,19 @@
+exchange: 
+  name: kraken
+  symbols: 
+    - 'XRP/BTC'
+    - 'BTC/USD'
+    - 'BCH/BTC'
+    - 'BTC/USD'
+    - 'LTC/BTC'
+    - 'XRP/ETH'
+    - 'BCH/ETH'
+    - 'ETH/BTC'
+    - 'LTC/ETH'
+    - 'BCH/USDT'
+proxy:
+  address: http://18.130.227.240:3000
+  ip_pool_size: 4
+kafka:
+  address: 127.0.0.1:9092
+  topic: orderbook

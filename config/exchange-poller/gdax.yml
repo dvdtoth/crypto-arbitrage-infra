@@ -1,0 +1,19 @@
+exchange: 
+  name: gdax
+  symbols: 
+    - 'BCH/BTC'
+    - 'BTC/EUR'
+    - 'LTC/EUR'
+    - 'BTC/USD'
+    - 'BTC/EUR'
+    - 'ETH/USD'
+    - 'ETH/EUR'
+    - 'BCH/EUR'
+    - 'ETH/BTC'
+    - 'BCH/USD'
+proxy:
+  address: http://18.130.227.240:3000
+  ip_pool_size: 4
+kafka:
+  address: 127.0.0.1:9092
+  topic: orderbook
