@@ -6,11 +6,9 @@ exchange:
     - 'ETH'
     - 'EUR'
     - 'GBP'
-  limit: 40
-  sort: rank
 proxy:
   address: http://18.130.227.240:3000
   ip_pool_size: 4
 kafka:
-  address: 127.0.0.1:9092
+  address: kafka:9092
   topic: orderbook

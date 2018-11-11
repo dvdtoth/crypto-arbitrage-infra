@@ -1,0 +1,23 @@
+version: '3.5'
+services:
+  cmc:
+    image: poller
+    build: .
+    environment:
+      POLLER_CONFIG: cmc-poller/cmc.yml
+  gdax:
+    image: poller
+    environment:
+      POLLER_CONFIG: exchange-poller/gdax.yml
+  kraken:
+    image: poller
+    environment:
+      POLLER_CONFIG: exchange-poller/kraken.yml
+  bittrex:
+    image: poller
+    environment:
+      POLLER_CONFIG: exchange-poller/bittrex.yml
+networks:
+  default:
+    external:
+      name: crypto

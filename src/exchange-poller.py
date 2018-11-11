@@ -10,6 +10,8 @@ from kafka import KafkaProducer
 import logging
 import yaml
 
+import logging 
+logging.basicConfig(level=logging.DEBUG) 
 logger = logging.getLogger('Poller')
 logger.setLevel(logging.DEBUG)
 
