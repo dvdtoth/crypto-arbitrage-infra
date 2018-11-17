@@ -1,5 +1,5 @@
 exchange: 
-  name: gdax
+  name: coinbasepro
   symbols: 
     - 'BCH/BTC'
     - 'BTC/EUR'

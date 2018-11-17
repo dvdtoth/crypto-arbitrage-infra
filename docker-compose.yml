@@ -5,10 +5,10 @@ services:
     build: .
     environment:
       POLLER_CONFIG: cmc-poller/cmc.yml
-  # gdax:
+  # coinbasepro:
   #   image: poller
   #   environment:
-  #   POLLER_CONFIG: exchange-poller/gdax.yml
+  #   POLLER_CONFIG: exchange-poller/coinbasepro.yml
   bitstamp:
     image: poller
     environment:
