@@ -38,7 +38,7 @@ def produce(symbol, tickers):
     }
 
     payload = exchange.json(payload)
-    print(payload)
+    # print(payload)
     # logger.info(payload)
 
     kafka_producer.send(config['kafka']['topic'], payload)

@@ -40,11 +40,11 @@ def produce(symbol, orderbook):
 
 
 async def main(exchange, symbols):
-    print(symbols)
+    # print(symbols)
     i = 0
     while True:
         symbol = symbols[i % len(symbols)]
-        print(symbol)
+        # print(symbol)
         # logger.info(exchange.iso8601(exchange.milliseconds()), 'fetching', symbol, 'orderbook from', config['exchange']['name'])
         orderbook = await exchange.fetch_order_book(symbol, limit=20)
         produce(symbol, orderbook)
