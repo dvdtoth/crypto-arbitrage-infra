@@ -8,7 +8,7 @@ services:
   gdax:
     image: poller
     environment:
-      POLLER_CONFIG: exchange-poller/gdax.yml
+      POLLER_CONFIG: exchange-poller/bitstamp.yml
   kraken:
     image: poller
     environment:
