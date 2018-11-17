@@ -7,7 +7,7 @@ exchange:
     - 'EUR'
     - 'GBP'
 proxy:
-  address: http://18.130.227.240:3000
+  address: http://172.31.31.139:3000
   ip_pool_size: 4
 kafka:
   address: kafka:9092

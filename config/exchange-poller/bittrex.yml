@@ -1,5 +1,5 @@
 exchange: 
-  name: kraken
+  name: bittrex
   symbols: 
     - 'XRP/BTC'
     - 'BTC/USD'
@@ -12,7 +12,7 @@ exchange:
     - 'LTC/ETH'
     - 'BCH/USDT'
 proxy:
-  address: http://18.130.227.240:3000
+  address: http://172.31.18.148:3000
   ip_pool_size: 4
 kafka:
   address: kafka:9092

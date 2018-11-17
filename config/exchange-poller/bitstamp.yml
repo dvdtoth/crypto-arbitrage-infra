@@ -1,16 +1,16 @@
 exchange: 
-  name: gdax
+  name: bitstamp
   symbols: 
-    - 'BCH/BTC'
     - 'BTC/EUR'
-    - 'LTC/EUR'
-    - 'BTC/USD'
-    - 'BTC/EUR'
-    - 'ETH/USD'
-    - 'ETH/EUR'
-    - 'BCH/EUR'
     - 'ETH/BTC'
-    - 'BCH/USD'
+    - 'BTC/USD'
+    - 'ETH/USD'
+    - 'BCH/EUR'
+    - 'BCH/BTC'
+    - 'LTC/EUR'
+    - 'ETH/EUR' 
+    - 'XRP/BTC'
+    - 'LTC/BTC'
 proxy:
   address: http://172.31.18.148:3000
   ip_pool_size: 4
