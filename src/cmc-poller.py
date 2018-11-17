@@ -49,7 +49,7 @@ async def main(exchange, symbols):
     i = 0
     while True:
         symbol = symbols[i % len(symbols)]
-        # print(symbol)
+        print(symbol)
         # logger.info(exchange.iso8601(exchange.milliseconds()), 'fetching', symbol, 'orderbook from', config['exchange']['name'])
         tickers = await exchange.fetch_tickers(symbol, params={
                         "limit": 40,
@@ -64,7 +64,7 @@ async def main(exchange, symbols):
 # Use getattr to specify exchange, eg. ccxt.gdax
 exchange = getattr(ccxt, config['exchange']['name'])({
     'aiohttp_proxy': config['proxy']['address'],
-    'verbose': 'true',
+    # 'verbose': 'true',
     'timeout': 30000
 })
 
