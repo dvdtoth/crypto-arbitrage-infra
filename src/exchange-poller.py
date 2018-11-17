@@ -11,9 +11,9 @@ import logging
 import yaml
 
 import logging 
-logging.basicConfig(level=logging.DEBUG) 
-logger = logging.getLogger('Poller')
-logger.setLevel(logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG) 
+# logger = logging.getLogger('Poller')
+# logger.setLevel(logging.DEBUG)
 
 # Parse config
 with open(sys.argv[1], 'r') as config_file:

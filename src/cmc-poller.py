@@ -10,8 +10,8 @@ from kafka import KafkaProducer
 import logging
 import yaml
 
-logger = logging.getLogger('Poller')
-logger.setLevel(logging.DEBUG)
+# logger = logging.getLogger('Poller')
+# logger.setLevel(logging.DEBUG)
 
 # Parse config
 with open(sys.argv[1], 'r') as config_file:
