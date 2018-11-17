@@ -55,7 +55,7 @@ async def main(exchange, symbols):
 # Use getattr to specify exchange, eg. ccxt.gdax
 exchange = getattr(ccxt, config['exchange']['name'])({
     'aiohttp_proxy': config['proxy']['address'],
-    'verbose': 'true'
+    'verbose': 'true',
     'timeout': 30000
 })
 

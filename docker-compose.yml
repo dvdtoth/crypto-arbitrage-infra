@@ -5,7 +5,11 @@ services:
     build: .
     environment:
       POLLER_CONFIG: cmc-poller/cmc.yml
-  gdax:
+  # gdax:
+  #   image: poller
+  #   environment:
+  #   POLLER_CONFIG: exchange-poller/gdax.yml
+  bitstamp:
     image: poller
     environment:
       POLLER_CONFIG: exchange-poller/bitstamp.yml

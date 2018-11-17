@@ -1,12 +1,3 @@
-# ☣  CryptoArbitrage terraform
-
-This plan creates the following:
-- Kinesis stream
-- IAM roles and policies for kinesis producer and consumer
-
-## Architecture
-exchange poller (producers) -> kinesis-stream -> orderbook analyser (consumers)
-
 ## ☝ Prerequisites
 AWS profile named "crypto" with keys set up in your local ~/aws/credentials
 Eg:
