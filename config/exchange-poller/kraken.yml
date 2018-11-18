@@ -12,8 +12,8 @@ exchange:
     - 'BCH/BTC'
     - 'XRP/BTC'
 proxy:
-  address: http://172.31.16.10:3000
+  address: http://proxy1.cryptoindex.me:3000
   ip_pool_size: 4
 kafka:
-  address: kafka:9092
+  address: kafka.cryptoindex.me:9092
   topic: orderbook
