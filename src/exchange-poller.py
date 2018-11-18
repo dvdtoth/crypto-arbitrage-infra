@@ -7,13 +7,8 @@ import os
 import time
 import json
 from kafka import KafkaProducer
-import logging
+from logger import logger
 import yaml
-
-import logging 
-# logging.basicConfig(level=logging.DEBUG) 
-# logger = logging.getLogger('Poller')
-# logger.setLevel(logging.DEBUG)
 
 # Parse config
 with open(sys.argv[1], 'r') as config_file:
@@ -23,32 +18,37 @@ with open(sys.argv[1], 'r') as config_file:
 ratelimit = getattr(ccxt, config['exchange']['name'])().rateLimit
 delay = ratelimit / int(config['proxy']['ip_pool_size'])
 
-# logger.info(str(config['proxy']['ip_pool_size']) + ' IPs used')
-# logger.info('The rate limit is ' + str(ratelimit) + ' delaying by ' + str(delay) + ' ms')
+logger.info(str(config['proxy']['ip_pool_size']) + ' IPs used')
+logger.info('Rate limit: ' + str(ratelimit) + ' delaying by " ' + str(delay) + ' ms')
 
 kafka_producer = KafkaProducer(bootstrap_servers=config['kafka']['address'], value_serializer=lambda v: json.dumps(v).encode('utf-8'))
 
 def produce(symbol, orderbook):
 
-    orderbook['exchange'] = config['exchange']['name']
-    orderbook['symbol'] = symbol
-    orderbook['timestamp'] = exchange.milliseconds()
+    payload = {
+        'exchange': config['exchange']['name'],
+        'symbol': symbol,
+        'timestamp': exchange.milliseconds(),
+        'data': tickers
+    }
     payload = exchange.json(orderbook)
-    # logger.info(payload)
 
     kafka_producer.send(config['kafka']['topic'], payload)
 
 
 async def main(exchange, symbols):
-    # print(symbols)
+
     i = 0
     while True:
         symbol = symbols[i % len(symbols)]
-        print(symbol)
-        # logger.info(exchange.iso8601(exchange.milliseconds()), 'fetching', symbol, 'orderbook from', config['exchange']['name'])
-        orderbook = await exchange.fetch_order_book(symbol, limit=20)
-        produce(symbol, orderbook)
-        # logger.info(exchange.iso8601(exchange.milliseconds()), 'fetched', symbol, 'orderbook from', config['exchange']['name'])
+        try:
+            logger.info('fetching ' + str(symbol) + ' orderbook from ' + str(config['exchange']['name']))
+            orderbook = await exchange.fetch_order_book(symbol, limit=20)
+            produce(symbol, orderbook)
+        except (ccxt.ExchangeError, ccxt.NetworkError) as error:
+            logger.error('Fetch orderbook network/exchange error ' + exchange.name + " " + symbol + ": " + type(error).__name__ + " " + str(error.args))
+        except Exception as error:
+            logger.error('Fetch orderbook error ' + exchange.name + " " + symbol + ": " + type(error).__name__ + " " + str(error.args))
         time.sleep(delay / 1000)
         i += 1
 
