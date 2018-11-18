@@ -12,7 +12,7 @@ exchange:
     - 'BCH/BTC'
     - 'XRP/BTC'
 proxy:
-  address: http://172.31.31.139:3000
+  address: http://172.31.16.10:3000
   ip_pool_size: 4
 kafka:
   address: kafka:9092

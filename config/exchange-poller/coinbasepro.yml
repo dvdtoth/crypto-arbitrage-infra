@@ -12,7 +12,7 @@ exchange:
     - 'ETH/BTC'
     - 'BCH/USD'
 proxy:
-  address: http://172.31.18.148:3000
+  address: http://172.31.16.10:3000
   ip_pool_size: 4
 kafka:
   address: kafka:9092
