@@ -29,7 +29,7 @@ def produce(symbol, orderbook):
         'exchange': config['exchange']['name'],
         'symbol': symbol,
         'timestamp': exchange.milliseconds(),
-        'data': tickers
+        'data': orderbook
     }
     payload = exchange.json(orderbook)
 
