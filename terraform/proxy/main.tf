@@ -100,7 +100,20 @@ data "template_file" "haproxy" {
   }
 }
 
+resource "aws_route53_record" "proxy1" {
+  zone_id = "ZV2NCER43JK3Y"
+  name    = "proxy1"
+  type    = "A"
+  ttl     = "300"
+  records = ["${aws_eip.ips.*.public_ip}"]
+}
+
 output "ip" {
   description = "Connect on port 3000 to proxy load balancers"
   value = ["${aws_eip.ips.*.public_ip}"]
+}
+
+output "hostname" {
+  description = "Connect on port 3000 to proxy load balancers"
+  value = "${aws_route53_record.proxy1.fqdn}"
 }
