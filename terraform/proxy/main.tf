@@ -105,15 +105,16 @@ resource "aws_route53_record" "proxy1" {
   name    = "proxy1"
   type    = "A"
   ttl     = "300"
-  records = ["${aws_eip.ips.*.public_ip}"]
+  records = ["172.31.16.10", "172.31.16.12"]
 }
 
 output "ip" {
   description = "Connect on port 3000 to proxy load balancers"
+  # TODO
   value = ["${aws_eip.ips.*.public_ip}"]
 }
 
 output "hostname" {
-  description = "Connect on port 3000 to proxy load balancers"
+  description = "FQDN"
   value = "${aws_route53_record.proxy1.fqdn}"
 }
