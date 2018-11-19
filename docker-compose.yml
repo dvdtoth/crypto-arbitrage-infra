@@ -8,7 +8,7 @@ services:
   coinbasepro:
     image: poller
     environment:
-    POLLER_CONFIG: exchange-poller/coinbasepro.yml
+      POLLER_CONFIG: exchange-poller/coinbasepro.yml
   bitstamp:
     image: poller
     environment:
