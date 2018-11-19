@@ -31,7 +31,7 @@ def produce(symbol, orderbook):
         'timestamp': exchange.milliseconds(),
         'data': orderbook
     }
-    payload = exchange.json(orderbook)
+    payload = exchange.json(payload)
 
     kafka_producer.send(config['kafka']['topic'], payload)
 
