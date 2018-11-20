@@ -9,7 +9,7 @@ service docker start
 git clone https://github.com/wurstmeister/kafka-docker.git
 cat > 
 docker-compose -f kafka-docker/kafka-single.yml up -d
-git clone https://oauth2:YUixt3ZPkp-iKEHvYgah@gitlab.com/cryptoindex/orderbook-poller.git
+git clone https://oauth2:${gitlab_token}@gitlab.com/cryptoindex/orderbook-poller.git
 docker-compose -f orderbook-poller/docker-compose.yml up -d
 
 
