@@ -1,3 +1,21 @@
+![alt text](../poller-decoupling.png)
+
+## Terraform
+
+There are 3 terraform plans:
+security_groups
+proxy
+poller (still WIP)
+
+# security_groups
+Builds security groups for proxy and poller roles
+
+# proxy
+Launches configurable number of proxy instances with 2 public IPs associated for each
+
+# poller
+Launches a poller instance and deploys kafka and zookeper and poller containers
+
 ## ☝ Prerequisites
 AWS profile named "crypto" with keys set up in your local ~/aws/credentials
 Eg:
@@ -16,11 +34,11 @@ Create:
 
 `terraform init`
 
-`terraform apply -var-file="test.tfvars"`
+`terraform apply`
 
 Review any changes:
 
-`terraform plan -var-file="test.tfvars"`
+`terraform plan`
 
 Destroy:
 

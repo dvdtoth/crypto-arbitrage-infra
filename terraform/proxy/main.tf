@@ -100,21 +100,34 @@ data "template_file" "haproxy" {
   }
 }
 
-resource "aws_route53_record" "proxy1" {
-  zone_id = "ZV2NCER43JK3Y"
-  name    = "proxy1"
-  type    = "A"
-  ttl     = "300"
-  records = ["172.31.16.10", "172.31.16.12"]
+# In case we want to use fqdns for proxy address
+# Keep it fast without DNS for now
+# resource "aws_route53_record" "proxy" {
+#   count   = "${var.proxies}"
+#   zone_id = "ZV2NCER43JK3Y"
+#   name    = "proxy${count.index + 1}"
+#   type    = "A"
+#   ttl     = "300"
+#   records = ["172.31.16.${count.index * 2 + 10}"]
+# }
+
+# output "hostname" {
+#   description = "FQDN"
+#   value = "${element(aws_route53_record.proxy.*.fqdn, 1)}"
+# }
+
+resource "aws_ssm_parameter" "proxy_pool" {
+  name  = "${var.environment}/proxy/size"
+  description = "The parameter description"
+  type        = "StringList"
+  value       = "${var.proxies}"
+
+  tags {
+    Environment = "${var.environment}"
+    ManagedBy = "Terraform"
+  }
 }
 
-output "ip" {
-  description = "Connect on port 3000 to proxy load balancers"
-  # TODO
+output "public_ips" {
   value = ["${aws_eip.ips.*.public_ip}"]
-}
-
-output "hostname" {
-  description = "FQDN"
-  value = "${aws_route53_record.proxy1.fqdn}"
 }

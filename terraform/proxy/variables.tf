@@ -6,7 +6,7 @@ variable "proxies" {
 variable "environment" {
   type = "string"
   description = "Environment"
-  default = "Production"
+  default = "prod"
 }
 
 variable "aws_profile" {
