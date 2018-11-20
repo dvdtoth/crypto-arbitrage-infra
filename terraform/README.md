@@ -1,3 +1,5 @@
+# High-level diagram
+
 ![alt text](../poller-decoupling.png)
 
 # Terraform
