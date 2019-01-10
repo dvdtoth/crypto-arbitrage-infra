@@ -13,7 +13,9 @@ git clone https://oauth2:YUixt3ZPkp-iKEHvYgah@gitlab.com/cryptoindex/orderbook-p
 docker-compose -f orderbook-poller/docker-compose.yml up -d
 
 
-systemctl enable squid
-systemctl enable haproxy
-service squid start
-service haproxy start
+sudo su
+yum install git -y
+amazon-linux-extras install docker -y
+usermod -a -G docker ec2-user
+systemctl enable docker
+service docker start
