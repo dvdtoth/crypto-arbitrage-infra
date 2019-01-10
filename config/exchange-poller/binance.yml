@@ -1,5 +1,5 @@
 exchange: 
-  name: poloniex
+  name: binance
   symbols: 
     - 'BCH/BTC'
     - 'XRP/BTC'
