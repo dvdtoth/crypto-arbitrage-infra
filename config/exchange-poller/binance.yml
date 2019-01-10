@@ -1,16 +1,16 @@
 exchange: 
-  name: kraken
+  name: poloniex
   symbols: 
-    - 'BTC/USD'
-    - 'BTC/EUR'
-    - 'BTC/USD'
-    - 'BCH/USD'
-    - 'XRP/USD'
-    - 'LTC/EUR'
-    - 'LTC/USD'
-    - 'ETH/BTC'
     - 'BCH/BTC'
     - 'XRP/BTC'
+    - 'LTC/BTC'
+    - 'ETH/BTC'
+    - 'BCH/ETH'
+    - 'ETC/BTC'
+    - 'ETC/ETH'
+    - 'LSK/ETH'
+    - 'LSK/BTC'
+    - 'LTC/USDT'
 proxy:
   address: http://172.31.16.12:3000
   ip_pool_size: 4
