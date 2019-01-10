@@ -17,6 +17,14 @@ services:
     image: poller
     environment:
       POLLER_CONFIG: exchange-poller/kraken.yml
+  poloniex:
+    image: poller
+    environment:
+      POLLER_CONFIG: exchange-poller/poloniex.yml
+  binance:
+    image: poller
+    environment:
+      POLLER_CONFIG: exchange-poller/binance.yml
   # bittrex:
   #   image: poller
   #   environment:

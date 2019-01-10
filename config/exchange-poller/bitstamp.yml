@@ -12,7 +12,7 @@ exchange:
     - 'XRP/BTC'
     - 'LTC/BTC'
 proxy:
-  address: http://proxy1.cryptoindex.me:3000
+  address: http://172.31.16.10:3000
   ip_pool_size: 4
 kafka:
   address: kafka.cryptoindex.me:9092

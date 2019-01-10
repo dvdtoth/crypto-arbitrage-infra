@@ -1,16 +1,16 @@
 exchange: 
-  name: coinbasepro
+  name: poloniex
   symbols: 
     - 'BCH/BTC'
-    - 'BTC/EUR'
-    - 'LTC/EUR'
-    - 'BTC/USD'
-    - 'BTC/EUR'
-    - 'ETH/USD'
-    - 'ETH/EUR'
-    - 'BCH/EUR'
+    - 'XRP/BTC'
+    - 'LTC/BTC'
     - 'ETH/BTC'
-    - 'BCH/USD'
+    - 'BCH/ETH'
+    - 'ETC/BTC'
+    - 'ETC/ETH'
+    - 'LSK/ETH'
+    - 'LSK/BTC'
+    - 'LTC/USDT'
 proxy:
   address: http://172.31.16.10:3000
   ip_pool_size: 4
