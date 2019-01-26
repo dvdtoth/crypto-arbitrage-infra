@@ -48,7 +48,7 @@ async def pollForex(symbols, authkey, accountid):
         await asyncio.sleep(delay)
 
 async def forexPoller(symbols, authkey, accountid, orderbookAnalyser):
-    async for ticker in pollForex(symbols=symbols, authkey=authkey, ccountid=accountid):
+    async for ticker in pollForex(symbols=symbols, authkey=authkey, accountid=accountid):
         try:
             symbolBase = ticker['prices'][0]['instrument'].split("_")[0]
             symbolQuote = ticker['prices'][0]['instrument'].split("_")[1]
