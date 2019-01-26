@@ -10,6 +10,7 @@ from kafka import KafkaProducer
 from logger import logger
 import yaml
 
+
 # Parse config
 with open(sys.argv[1], 'r') as config_file:
     config = yaml.load(config_file)

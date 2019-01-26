@@ -63,7 +63,7 @@ async def forexPoller(symbols, authkey, accountid, orderbookAnalyser):
             payload['timestamp'] = time.mktime(dateutil.parser.parse(ticker['time']).timetuple())
             logger.info("Received " + symbolBase+"/" + symbolQuote + " prices from Oanda")
             
-            p = exchange.json(payload)
+            p = json.dumps(payload, separators=(',', ':'))
             kafka_producer.send(config['kafka']['topic'], p)
 
         except Exception as error:
