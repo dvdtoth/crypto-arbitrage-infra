@@ -72,7 +72,7 @@ async def forexPoller(symbols, authkey, accountid, orderbookAnalyser):
 oandaCredentials = getOandaCredentials()
 asyncio.ensure_future(
     forexPoller(
-        symbols=config.exchange.symbols,
+        symbols=config['exchange']['symbols'],
         authkey=oandaCredentials['apikey'],
         accountid=oandaCredentials['accountid'],
         orderbookAnalyser=None))
