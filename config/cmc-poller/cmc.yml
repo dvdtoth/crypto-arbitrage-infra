@@ -1,3 +1,4 @@
+handler: cmc-poller.py
 exchange: 
   name: coinmarketcap
   symbols: 

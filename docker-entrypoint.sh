@@ -1,6 +1,2 @@
 #!/bin/bash
-if [ "$POLLER_CONFIG" = "cmc-poller/cmc.yml" ]; then
-    python ./src/cmc-poller.py ./config/$POLLER_CONFIG
-else
-    python ./src/exchange-poller.py ./config/$POLLER_CONFIG
-fi
+python $(head -1 ./config/$CONFIG |cut -d" " -f2) ./config/$CONFIG

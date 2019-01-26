@@ -1,3 +1,4 @@
+handler: exchange-poller.py
 exchange: 
   name: binance
   symbols: 

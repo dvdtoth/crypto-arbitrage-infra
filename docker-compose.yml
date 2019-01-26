@@ -4,31 +4,35 @@ services:
     image: poller
     build: .
     environment:
-      POLLER_CONFIG: cmc-poller/cmc.yml
+      CONFIG: cmc-poller/cmc.yml
   coinbasepro:
     image: poller
     environment:
-      POLLER_CONFIG: exchange-poller/coinbasepro.yml
+      CONFIG: exchange-poller/coinbasepro.yml
   bitstamp:
     image: poller
     environment:
-      POLLER_CONFIG: exchange-poller/bitstamp.yml
+      CONFIG: exchange-poller/bitstamp.yml
   kraken:
     image: poller
     environment:
-      POLLER_CONFIG: exchange-poller/kraken.yml
+      CONFIG: exchange-poller/kraken.yml
   poloniex:
     image: poller
     environment:
-      POLLER_CONFIG: exchange-poller/poloniex.yml
+      CONFIG: exchange-poller/poloniex.yml
   binance:
     image: poller
     environment:
-      POLLER_CONFIG: exchange-poller/binance.yml
+      CONFIG: exchange-poller/binance.yml
+  oanda:
+    image: poller
+    environment:
+      CONFIG: exchange-poller/oanda.yml
   # bittrex:
   #   image: poller
   #   environment:
-  #     POLLER_CONFIG: exchange-poller/bittrex.yml
+  #     CONFIG: exchange-poller/bittrex.yml
 networks:
   default:
     external:

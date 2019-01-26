@@ -1,0 +1,14 @@
+handler: oanda-poller.py
+exchange: 
+  name: oanda
+  symbols: 
+    - 'EUR_USD'
+    - 'GBP_USD'
+    - 'EUR_GBP'
+  rate_limit: 0.5
+proxy:
+  address: http://172.31.16.12:3000
+  ip_pool_size: 4
+kafka:
+  address: kafka.cryptoindex.me:9092
+  topic: orderbook
