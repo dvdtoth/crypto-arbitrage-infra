@@ -22,8 +22,7 @@ def getSSMParam(ssm,paramName):
 
 def getOandaCredentials():
     # Read parameters from AWS SSM         
-        ssm = boto3.client('ssm',
-            region_name='eu-west-1')
+    ssm = boto3.client('ssm', region_name='eu-west-1')
 
     return {
             'accountid' : FWLiveParams.getSSMParam(ssm,'/prod/exchange/oanda/accountid'),
