@@ -38,7 +38,7 @@ async def pollForex(symbols, authkey,accountid):
                 async with session.get(
                         url="https://api-fxpractice.oanda.com/v3/accounts/"+accountid+"/pricing",
                         headers={'Authorization': ('Bearer ' + authkey)},
-                        params='instruments=' + symbol
+                        params='instruments=' + symbol,
                         proxy=config['proxy']['address']) as resp:
                     yield (await resp.json())
         except Exception as error:
