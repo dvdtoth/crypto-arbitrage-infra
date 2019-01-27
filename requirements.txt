@@ -18,3 +18,4 @@ yarl==1.1.0
 python-dateutil
 boto3==1.7.35
 pysher
+websockets

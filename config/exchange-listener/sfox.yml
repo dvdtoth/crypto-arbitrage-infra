@@ -1,0 +1,12 @@
+handler: sfox-listener.py
+exchange: 
+  name: sfox
+  symbols: 
+    - 'bchbtc'
+    - 'bchusd'
+    - 'ethbtc'
+    - 'btcusd'
+    - 'ethusd'
+kafka:
+  address: kafka.cryptoindex.me:9092
+  topic: orderbook
