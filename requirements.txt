@@ -19,4 +19,3 @@ python-dateutil
 boto3==1.7.35
 pysher
 websockets
-functools
