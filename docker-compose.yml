@@ -12,7 +12,7 @@ services:
   bitstamp:
     image: poller
     environment:
-      CONFIG: exchange-poller/bitstamp.yml
+      CONFIG: exchange-listener/bitstamp.yml
   kraken:
     image: poller
     environment:
