@@ -60,7 +60,7 @@ async def forexPoller(symbols, authkey, accountid, orderbookAnalyser):
             payload['data'] = {}
             payload['data']['asks'] = [[float(asks[0]['price']), asks[0]['liquidity']]]
             payload['data']['bids'] = [[float(bids[0]['price']), bids[0]['liquidity']]]
-            payload['timestamp'] = time.mktime(dateutil.parser.parse(ticker['time']).timetuple())
+            payload['timestamp'] = int(time.mktime(dateutil.parser.parse(ticker['time']).timetuple())) * 1000
             logger.info("Received " + symbolBase+"/" + symbolQuote + " prices from Oanda")
             
             p = json.dumps(payload, separators=(',', ':'))
