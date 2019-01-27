@@ -47,4 +47,5 @@ def connectHandler(data):
 pusher.connection.bind('pusher:connection_established', connectHandler)
 pusher.connect()
 
-input()
+while True:
+    time.sleep(1)
