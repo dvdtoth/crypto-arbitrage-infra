@@ -33,6 +33,7 @@ services:
     image: poller
     environment:
       CONFIG: exchange-listener/sfox.yml
+    restart: always
   # bittrex:
   #   image: poller
   #   environment:
