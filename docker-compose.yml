@@ -29,6 +29,10 @@ services:
     image: poller
     environment:
       CONFIG: exchange-poller/oanda.yml
+  sfox:
+    image: poller
+    environment:
+      CONFIG: exchange-listener/sfox.yml
   # bittrex:
   #   image: poller
   #   environment:
