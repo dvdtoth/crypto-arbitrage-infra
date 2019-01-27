@@ -47,4 +47,4 @@ def connectHandler(data):
 pusher.connection.bind('pusher:connection_established', connectHandler)
 pusher.connect()
 
-x = input()
+input()
