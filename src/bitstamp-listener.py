@@ -26,7 +26,8 @@ def orderbookHandler(symbols, dataraw):
     payload['data'] = {}
     payload['data']['asks'] = list(map(lambda entry:[float(entry[0]), float(entry[1])], data['asks']))
     payload['data']['bids'] = list(map(lambda entry:[float(entry[0]), float(entry[1])], data['bids']))
-    payload['timestamp'] = float(data['microtimestamp'])/1e6
+    payload['timestamp'] = int(float(data['microtimestamp'])/1e3)
+    print(payload['timestamp'])
     logger.info("Received " + symbolBase+"/" + symbolQuote + " prices from Bitstamp")
 
     p = json.dumps(payload, separators=(',', ':'))
