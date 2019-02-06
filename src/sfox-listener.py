@@ -6,12 +6,15 @@ import sys
 from kafka import KafkaProducer
 import yaml
 import time
+from CWMetrics import CWMetrics
 
 # Parse config
 with open(sys.argv[1], 'r') as config_file:
     config = yaml.load(config_file)
 
 kafka_producer = KafkaProducer(bootstrap_servers=config['kafka']['address'], value_serializer=lambda v: json.dumps(v).encode('utf-8'))
+
+metrics = CWMetrics(config['exchange']['name'])
 
 async def sfoxWebSocket(symbols):
     async with websockets.connect('wss://ws.sfox.com/ws') as ws:
@@ -42,10 +45,12 @@ async def sfoxWebSocket(symbols):
                 payload['data']['asks'] = list(map(lambda entry:entry[0:2], msg['payload']['asks']))
                 payload['data']['bids'] = list(map(lambda entry:entry[0:2], msg['payload']['bids']))
                 payload['timestamp'] = msg['timestamp']/1e6
-                logger.info("Received " + symbol + " prices from SFOX")
                 
                 p = json.dumps(payload, separators=(',', ':'))
                 kafka_producer.send(config['kafka']['topic'], p)
+
+                logger.info("Received " + symbol + " prices from SFOX")
+                metrics.put(payload['timestamp'])
 
             except Exception as error:
                 logger.warn("Error while parsing SFOX websocket data: " + type(error).__name__ + " " + str(error.args))
