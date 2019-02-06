@@ -5,6 +5,7 @@ from kafka import KafkaProducer
 import sys
 import yaml
 import json
+from CWMetrics import CWMetrics
 
 # Parse config
 with open(sys.argv[1], 'r') as config_file:
@@ -12,6 +13,7 @@ with open(sys.argv[1], 'r') as config_file:
 
 kafka_producer = KafkaProducer(bootstrap_servers=config['kafka']['address'], value_serializer=lambda v: json.dumps(v).encode('utf-8'))
 
+metrics = CWMetrics(config['exchange']['name'])
 
 # configurable parameters
 orderbookDepthInSubscription = 25
@@ -97,10 +99,11 @@ def krakenMessageHandler(message):
     payload['data']['bids'] = bids
     payload['timestamp'] = orderbooks[channelID]['timestamp']
 
-    logger.info(orderbooks[channelID]['symbol'] + " asks:"+str(asks)+", bids:"+str(bids) + " timestamp:"+str(payload['timestamp']))
     p = json.dumps(payload, separators=(',', ':'))
     kafka_producer.send(config['kafka']['topic'], p)
 
+    logger.info(orderbooks[channelID]['symbol'] + " asks:"+str(asks)+", bids:"+str(bids) + " timestamp:"+str(payload['timestamp']))
+    metrics.put(payload['timestamp'])
 
 krakenNamingMappings = [('BTC','XBT')]
 def translateNamingFromStandardToKraken(symbolsList,reversed=False):
