@@ -11,11 +11,11 @@ from logger import logger
 import yaml
 from CWMetrics import CWMetrics
 
-metrics = CWMetrics(config['exchange']['name'])
-
 # Parse config
 with open(sys.argv[1], 'r') as config_file:
     config = yaml.load(config_file)
+
+metrics = CWMetrics(config['exchange']['name'])
 
 # Consider recommended ratelimit of exchange, divide it by the number of IPs used
 ratelimit = getattr(ccxt, config['exchange']['name'])().rateLimit
