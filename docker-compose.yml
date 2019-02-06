@@ -16,7 +16,7 @@ services:
   kraken:
     image: poller
     environment:
-      CONFIG: exchange-poller/kraken.yml
+      CONFIG: exchange-listener/kraken.yml
   poloniex:
     image: poller
     environment:

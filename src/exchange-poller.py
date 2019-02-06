@@ -33,7 +33,7 @@ def produce(symbol, orderbook):
         'data': orderbook
     }
     payload = exchange.json(payload)
-
+    
     kafka_producer.send(config['kafka']['topic'], payload)
 
 
