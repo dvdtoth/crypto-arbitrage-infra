@@ -8,11 +8,11 @@ import yaml
 from functools import partial
 from CWMetrics import CWMetrics
 
-metrics = CWMetrics(config['exchange']['name'])
-
 # Parse config
 with open(sys.argv[1], 'r') as config_file:
     config = yaml.load(config_file)
+
+metrics = CWMetrics(config['exchange']['name'])
 
 kafka_producer = KafkaProducer(bootstrap_servers=config['kafka']['address'], value_serializer=lambda v: json.dumps(v).encode('utf-8'))
 
