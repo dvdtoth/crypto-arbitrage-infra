@@ -4,7 +4,7 @@ async-timeout==3.0.1
 asyncio==3.4.3
 asynctest==0.12.2
 attrs==18.2.0
-ccxt==1.17.488
+ccxt
 certifi==2018.8.24
 chardet==3.0.4
 idna==2.7
@@ -19,3 +19,5 @@ python-dateutil
 boto3==1.7.35
 pysher
 websockets
+sortedcontainers
+kraken-wsclient-py
