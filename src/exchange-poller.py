@@ -37,7 +37,7 @@ def produce(symbol, orderbook):
     payload = exchange.json(payload)
     
     kafka_producer.send(config['kafka']['topic'], payload)
-    metrics = CWMetrics(config['exchange']['name'])
+    metrics.put(payload['timestamp'])
 
 
 async def main(exchange, symbols):
