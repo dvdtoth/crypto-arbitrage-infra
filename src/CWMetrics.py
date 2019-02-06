@@ -16,7 +16,7 @@ class CWMetrics:
         self.metric_data = []
         self.last_put_time = 0
         self.count_samples = 0
-        self.cloudwatch = boto3.client('cloudwatch')
+        self.cloudwatch = boto3.client('cloudwatch', region_name='eu-west-1')
         #self.cloudwatch = cw
 
     def put(self, timestamp):
