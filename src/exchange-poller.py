@@ -9,7 +9,9 @@ import json
 from kafka import KafkaProducer
 from logger import logger
 import yaml
+from CWMetrics import CWMetrics
 
+metrics = CWMetrics(config['exchange']['name'])
 
 # Parse config
 with open(sys.argv[1], 'r') as config_file:
@@ -35,6 +37,7 @@ def produce(symbol, orderbook):
     payload = exchange.json(payload)
     
     kafka_producer.send(config['kafka']['topic'], payload)
+    metrics = CWMetrics(config['exchange']['name'])
 
 
 async def main(exchange, symbols):
