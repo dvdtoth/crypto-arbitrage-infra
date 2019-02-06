@@ -8,6 +8,9 @@ from logger import logger
 from kafka import KafkaProducer
 import yaml
 import boto3
+from CWMetrics import CWMetrics
+
+metrics = CWMetrics(config['exchange']['name'])
 
 # Parse config
 with open(sys.argv[1], 'r') as config_file:
@@ -62,10 +65,12 @@ async def forexPoller(symbols, authkey, accountid, orderbookAnalyser):
             payload['data']['bids'] = [[float(bids[0]['price']), bids[0]['liquidity']]]
             dt = dateutil.parser.parse(ticker['time'])
             payload['timestamp'] = int(time.mktime(dt.timetuple()) * 1000 + dt.microsecond / 1000)
-            logger.info("Received " + symbolBase+"/" + symbolQuote + " prices from Oanda")
             
             p = json.dumps(payload, separators=(',', ':'))
             kafka_producer.send(config['kafka']['topic'], p)
+
+            logger.info("Received " + symbolBase+"/" + symbolQuote + " prices from Oanda")
+            metrics.put(payload['timestamp'])
 
         except Exception as error:
             logger.error("Error interpreting Oanda ticker: " + type(error).__name__ + " " + str(error.args))

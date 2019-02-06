@@ -6,6 +6,9 @@ import sys
 from kafka import KafkaProducer
 import yaml
 from functools import partial
+from CWMetrics import CWMetrics
+
+metrics = CWMetrics(config['exchange']['name'])
 
 # Parse config
 with open(sys.argv[1], 'r') as config_file:
@@ -28,10 +31,12 @@ def orderbookHandler(symbols, dataraw):
     payload['data']['bids'] = list(map(lambda entry:[float(entry[0]), float(entry[1])], data['bids']))
     payload['timestamp'] = int(float(data['microtimestamp'])/1e3)
     print(payload['timestamp'])
-    logger.info("Received " + symbolBase+"/" + symbolQuote + " prices from Bitstamp")
 
     p = json.dumps(payload, separators=(',', ':'))
     kafka_producer.send(config['kafka']['topic'], p)
+
+    logger.info("Received " + symbolBase+"/" + symbolQuote + " prices from Bitstamp")
+    metrics.put(payload['timestamp'])
 
 def connectHandler(data):
     pairs = config['exchange']['symbols']
