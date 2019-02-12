@@ -7,6 +7,7 @@ import sys
 #cw = session.client('cloudwatch')
 
 class CWMetrics:
+    
 
     def __init__(self, exchange):
 
@@ -18,6 +19,9 @@ class CWMetrics:
         self.count_samples = 0
         self.cloudwatch = boto3.client('cloudwatch', region_name='eu-west-1')
         #self.cloudwatch = cw
+
+    def millisec(self):
+        return datetime.fromtimestamp(int(round(time.time()))).isoformat()
 
     def putCMC(self, timestamp):
 
@@ -33,7 +37,7 @@ class CWMetrics:
 
         data = {
                     'MetricName': 'CMC_ERROR',
-                    'Timestamp': datetime.fromtimestamp(timestamp/1000).isoformat(),
+                    'Timestamp': self.millisec(),
                     'Unit': 'Count',
                     'Value': 1
                 }
@@ -50,7 +54,7 @@ class CWMetrics:
                             'Value': self.exchange
                         }
                     ],
-                    'Timestamp': datetime.fromtimestamp(timestamp/1000).isoformat(),
+                    'Timestamp': self.millisec(),
                     'Unit': 'Count',
                     'Value': 1
                 }

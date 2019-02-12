@@ -46,6 +46,7 @@ async def pollForex(symbols, authkey, accountid):
                     yield (await resp.json())
         except Exception as error:
             logger.error("Error while fetching forex rates from Oanda: " + type(error).__name__ + " " + str(error.args))
+            metrics.putError()
             
         i += 1
         await asyncio.sleep(delay)
@@ -74,7 +75,7 @@ async def forexPoller(symbols, authkey, accountid, orderbookAnalyser):
 
         except Exception as error:
             logger.error("Error interpreting Oanda ticker: " + type(error).__name__ + " " + str(error.args))
-            metrics.putError(payload['timestamp'])
+            metrics.putError()
 
 oandaCredentials = getOandaCredentials()
 asyncio.ensure_future(
