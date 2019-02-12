@@ -33,7 +33,7 @@ class CWMetrics:
                 }
         response = self.cloudwatch.put_metric_data(Namespace='TEST/CMC', MetricData=data)
     
-    def putCMCError(self, timestamp):
+    def putCMCError(self):
 
         data = {
                     'MetricName': 'CMC_ERROR',
@@ -44,7 +44,7 @@ class CWMetrics:
         response = self.cloudwatch.put_metric_data(Namespace='TEST/CMC', MetricData=data)
 
 
-    def putError(self, timestamp):
+    def putError(self):
 
         error_data = {
                     'MetricName': 'ORDERBOOK_ERROR',
