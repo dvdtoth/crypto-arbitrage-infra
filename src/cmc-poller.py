@@ -9,12 +9,15 @@ import json
 from kafka import KafkaProducer
 import yaml
 from logger import logger
+from CWMetrics import CWMetrics
 
 # Parse config
 with open(sys.argv[1], 'r') as config_file:
     config = yaml.load(config_file)
 
 # TODO check config params
+
+metrics = CWMetrics(config['exchange']['name'])
 
 # Consider recommended ratelimit of exchange, divide it by the number of IPs used
 ratelimit = getattr(ccxt, config['exchange']['name'])().rateLimit
@@ -33,9 +36,11 @@ def produce(symbol, tickers):
         'timestamp': exchange.milliseconds(),
         'data': tickers
     }
-    payload = exchange.json(payload)
 
-    kafka_producer.send(config['kafka']['topic'], payload)
+    p = json.dumps(payload, separators=(',', ':'))
+    kafka_producer.send(config['kafka']['topic'], p)
+
+    metrics.putCMC(payload['timestamp'])
 
 
 async def main(exchange, symbols):
@@ -50,10 +55,13 @@ async def main(exchange, symbols):
                         "sort": "rank"
                         })
             produce(symbol, tickers)
+            
         except (ccxt.ExchangeError, ccxt.NetworkError) as error:
             logger.error('Fetch orderbook network/exchange error ' + exchange.name + " " + symbol + ": " + type(error).__name__ + " " + str(error.args))
+            metrics.putCMCError(payload['timestamp'])
         except Exception as error:
             logger.error('Fetch orderbook error ' + exchange.name + " " + symbol + ": " + type(error).__name__ + " " + str(error.args))
+            metrics.putCMCError(payload['timestamp'])
         time.sleep(delay / 1000)
         i += 1
 

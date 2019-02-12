@@ -74,6 +74,7 @@ async def forexPoller(symbols, authkey, accountid, orderbookAnalyser):
 
         except Exception as error:
             logger.error("Error interpreting Oanda ticker: " + type(error).__name__ + " " + str(error.args))
+            metrics.putError(payload['timestamp'])
 
 oandaCredentials = getOandaCredentials()
 asyncio.ensure_future(
