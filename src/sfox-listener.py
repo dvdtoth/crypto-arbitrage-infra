@@ -29,9 +29,11 @@ async def sfoxWebSocket(symbols):
             msg = json.loads(resp)
             if msg["type"] != "success":
                 logger.error("Subscribtion to SFOX unsuccessful, response type=" + msg["type"])
+                metrics.putError(payload['timestamp'])
                 return
         except Exception as error:
             logger.error("Failed to subscribe to SFOX web socket: " + type(error).__name__ + " " + str(error.args))
+            metrics.putError(payload['timestamp'])
 
         async for message in ws:
             try:
@@ -54,5 +56,6 @@ async def sfoxWebSocket(symbols):
 
             except Exception as error:
                 logger.warn("Error while parsing SFOX websocket data: " + type(error).__name__ + " " + str(error.args))
+                metrics.putError(payload['timestamp'])
 
 asyncio.get_event_loop().run_until_complete(sfoxWebSocket(symbols=config['exchange']['symbols'],))

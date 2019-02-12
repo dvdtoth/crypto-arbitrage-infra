@@ -39,16 +39,21 @@ def orderbookHandler(symbols, dataraw):
     metrics.put(payload['timestamp'])
 
 def connectHandler(data):
-    pairs = config['exchange']['symbols']
+    try:
+        pairs = config['exchange']['symbols']
 
-    # subscribe to all the relevant channels
-    for pair in pairs:
-        pair = pair.lower().replace('/','')
-        if pair == 'btcusd':
-            channel = pusher.subscribe('order_book')
-        else:
-            channel = pusher.subscribe('order_book_' + pair)
-        channel.bind('data', partial(orderbookHandler, pair))
+        # subscribe to all the relevant channels
+        for pair in pairs:
+            pair = pair.lower().replace('/','')
+            if pair == 'btcusd':
+                channel = pusher.subscribe('order_book')
+            else:
+                channel = pusher.subscribe('order_book_' + pair)
+            channel.bind('data', partial(orderbookHandler, pair))
+
+    except Exception as error:
+        logger.error("Error in Bitstamp web socket connection: " + type(error).__name__ + " " + str(error.args))
+        metrics.putError(payload['timestamp'])
 
 pusher.connection.bind('pusher:connection_established', connectHandler)
 pusher.connect()

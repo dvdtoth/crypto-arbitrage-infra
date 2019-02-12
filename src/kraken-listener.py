@@ -52,58 +52,64 @@ def getTop(orderbook, itemCount = 3, reverse=False):
 
         
 def krakenMessageHandler(message):
-    # Is subscription confirmation message?
-    if 'event' in message and 'status' in message and 'channelID' in message and 'pair' in message:
-        # Was subscription successful?
-        if message['event'] == 'subscriptionStatus' and message['status'] == 'subscribed':            
-            channelID = message['channelID']
-            # create orderbook data structure for trading pair
-            orderbooks[channelID] = dict()
-            orderbooks[channelID]['symbol'] = translateNamingFromStandardToKraken([message['pair']],reversed=True)[0]
-            orderbooks[channelID]['asks'] = SortedDict()
-            orderbooks[channelID]['bids'] = SortedDict()
-            orderbooks[channelID]['timestamp'] = None
-    
-    
-    # Orderbook message?
-    if isinstance(message,list) is False:
-        return
 
-    channelID = message[0]
-    payload = message[1]
+    try:
+        # Is subscription confirmation message?
+        if 'event' in message and 'status' in message and 'channelID' in message and 'pair' in message:
+            # Was subscription successful?
+            if message['event'] == 'subscriptionStatus' and message['status'] == 'subscribed':            
+                channelID = message['channelID']
+                # create orderbook data structure for trading pair
+                orderbooks[channelID] = dict()
+                orderbooks[channelID]['symbol'] = translateNamingFromStandardToKraken([message['pair']],reversed=True)[0]
+                orderbooks[channelID]['asks'] = SortedDict()
+                orderbooks[channelID]['bids'] = SortedDict()
+                orderbooks[channelID]['timestamp'] = None
+        
+        
+        # Orderbook message?
+        if isinstance(message,list) is False:
+            return
 
-    # Process snapshot
-    if 'as' in payload and 'bs' in payload:        
-        processSnapshot(orderbook=orderbooks[channelID]['asks'], entries=payload['as'])
-        processSnapshot(orderbook=orderbooks[channelID]['bids'], entries=payload['bs'])
-        orderbooks[channelID]['timestamp']=getSnapshotTimestamp(payload['as'], payload['bs'])*1e3
-        return
-    
-    # Prodess deltas
-    if 'a' in payload:
-        processDelta(orderbook=orderbooks[channelID]['asks'],entries=payload['a'])
-        orderbooks[channelID]['timestamp']=getSnapshotTimestamp(payload['a'])*1e3
-    if 'b' in payload:
-        processDelta(orderbook=orderbooks[channelID]['bids'],entries=payload['b'])
-        orderbooks[channelID]['timestamp']=getSnapshotTimestamp(payload['b'])*1e3
-    
-    
-    # Data conversion
-    asks = getTop(orderbook=orderbooks[channelID]['asks'],itemCount=consolidatedOrderbookDepth)
-    bids = getTop(orderbook=orderbooks[channelID]['bids'],itemCount=consolidatedOrderbookDepth,reverse=True)
-    payload = {}
-    payload['exchange'] = "kraken"
-    payload['symbol'] = orderbooks[channelID]['symbol']
-    payload['data'] = {}
-    payload['data']['asks'] = asks
-    payload['data']['bids'] = bids
-    payload['timestamp'] = orderbooks[channelID]['timestamp']
+        channelID = message[0]
+        payload = message[1]
 
-    p = json.dumps(payload, separators=(',', ':'))
-    kafka_producer.send(config['kafka']['topic'], p)
+        # Process snapshot
+        if 'as' in payload and 'bs' in payload:        
+            processSnapshot(orderbook=orderbooks[channelID]['asks'], entries=payload['as'])
+            processSnapshot(orderbook=orderbooks[channelID]['bids'], entries=payload['bs'])
+            orderbooks[channelID]['timestamp']=getSnapshotTimestamp(payload['as'], payload['bs'])*1e3
+            return
+        
+        # Prodess deltas
+        if 'a' in payload:
+            processDelta(orderbook=orderbooks[channelID]['asks'],entries=payload['a'])
+            orderbooks[channelID]['timestamp']=getSnapshotTimestamp(payload['a'])*1e3
+        if 'b' in payload:
+            processDelta(orderbook=orderbooks[channelID]['bids'],entries=payload['b'])
+            orderbooks[channelID]['timestamp']=getSnapshotTimestamp(payload['b'])*1e3
+        
+        
+        # Data conversion
+        asks = getTop(orderbook=orderbooks[channelID]['asks'],itemCount=consolidatedOrderbookDepth)
+        bids = getTop(orderbook=orderbooks[channelID]['bids'],itemCount=consolidatedOrderbookDepth,reverse=True)
+        payload = {}
+        payload['exchange'] = "kraken"
+        payload['symbol'] = orderbooks[channelID]['symbol']
+        payload['data'] = {}
+        payload['data']['asks'] = asks
+        payload['data']['bids'] = bids
+        payload['timestamp'] = orderbooks[channelID]['timestamp']
 
-    logger.info(orderbooks[channelID]['symbol'] + " asks:"+str(asks)+", bids:"+str(bids) + " timestamp:"+str(payload['timestamp']))
-    metrics.put(payload['timestamp'])
+        p = json.dumps(payload, separators=(',', ':'))
+        kafka_producer.send(config['kafka']['topic'], p)
+
+        logger.info(orderbooks[channelID]['symbol'] + " asks:"+str(asks)+", bids:"+str(bids) + " timestamp:"+str(payload['timestamp']))
+        metrics.put(payload['timestamp'])
+
+    except Exception as error:
+        logger.error("Error in Kraken web socket connection: " + type(error).__name__ + " " + str(error.args))
+        metrics.putError(payload['timestamp'])
 
 krakenNamingMappings = [('BTC','XBT')]
 def translateNamingFromStandardToKraken(symbolsList,reversed=False):

@@ -52,8 +52,10 @@ async def main(exchange, symbols):
             produce(symbol, orderbook)
         except (ccxt.ExchangeError, ccxt.NetworkError) as error:
             logger.error('Fetch orderbook network/exchange error ' + exchange.name + " " + symbol + ": " + type(error).__name__ + " " + str(error.args))
+            metrics.putError(payload['timestamp'])
         except Exception as error:
             logger.error('Fetch orderbook error ' + exchange.name + " " + symbol + ": " + type(error).__name__ + " " + str(error.args))
+            metrics.putError(payload['timestamp'])
         time.sleep(delay / 1000)
         i += 1
 
