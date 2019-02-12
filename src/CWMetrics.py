@@ -21,28 +21,28 @@ class CWMetrics:
 
     def putCMC(self, timestamp):
 
-        data = ({
+        data = {
                     'MetricName': 'CMC_INGEST',
                     'Timestamp': datetime.fromtimestamp(timestamp/1000).isoformat(),
                     'Unit': 'Count',
                     'Value': 1
-                })
+                }
         response = self.cloudwatch.put_metric_data(Namespace='TEST/CMC', MetricData=data)
     
     def putCMCError(self, timestamp):
 
-        data = ({
+        data = {
                     'MetricName': 'CMC_ERROR',
                     'Timestamp': datetime.fromtimestamp(timestamp/1000).isoformat(),
                     'Unit': 'Count',
                     'Value': 1
-                })
+                }
         response = self.cloudwatch.put_metric_data(Namespace='TEST/CMC', MetricData=data)
 
 
     def putError(self, timestamp):
 
-        error_data = ({
+        error_data = {
                     'MetricName': 'ORDERBOOK_ERROR',
                     'Dimensions': [
                         {
@@ -53,7 +53,7 @@ class CWMetrics:
                     'Timestamp': datetime.fromtimestamp(timestamp/1000).isoformat(),
                     'Unit': 'Count',
                     'Value': 1
-                })
+                }
         response = self.cloudwatch.put_metric_data(Namespace='TEST/ORDERBOOK', MetricData=error_data)
 
     def put(self, timestamp):
