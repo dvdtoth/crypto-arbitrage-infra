@@ -109,7 +109,7 @@ def krakenMessageHandler(message):
 
     except Exception as error:
         logger.error("Error in Kraken web socket connection: " + type(error).__name__ + " " + str(error.args))
-        metrics.putError(payload['timestamp'])
+        metrics.putError()
 
 krakenNamingMappings = [('BTC','XBT')]
 def translateNamingFromStandardToKraken(symbolsList,reversed=False):

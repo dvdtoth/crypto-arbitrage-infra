@@ -53,7 +53,7 @@ def connectHandler(data):
 
     except Exception as error:
         logger.error("Error in Bitstamp web socket connection: " + type(error).__name__ + " " + str(error.args))
-        metrics.putError(payload['timestamp'])
+        metrics.putError()
 
 pusher.connection.bind('pusher:connection_established', connectHandler)
 pusher.connect()
