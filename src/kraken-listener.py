@@ -14,9 +14,8 @@ with open(sys.argv[1], 'r') as config_file:
 kafka_producer = KafkaProducer(bootstrap_servers=config['kafka']['address'], value_serializer=lambda v: json.dumps(v).encode('utf-8'))
 
 metrics = CWMetrics(config['exchange']['name'])
-
 # configurable parameters
-orderbookDepthInSubscription = 25
+orderbookDepthInSubscription = 10
 consolidatedOrderbookDepth = 10
 
 orderbooks = dict()
@@ -35,6 +34,8 @@ def processDelta(orderbook,entries):
             try:
                 orderbook.pop(float(entry[0]))
             except KeyError as e:
+                print('Error: Kraken asked to remove price level that doesn''t exist')
+                # metrics.putError()
                 pass
 
 def getTop(orderbook, itemCount = 3, reverse=False):
@@ -52,7 +53,6 @@ def getTop(orderbook, itemCount = 3, reverse=False):
 
         
 def krakenMessageHandler(message):
-
     try:
         # Is subscription confirmation message?
         if 'event' in message and 'status' in message and 'channelID' in message and 'pair' in message:
@@ -72,22 +72,23 @@ def krakenMessageHandler(message):
             return
 
         channelID = message[0]
-        payload = message[1]
+        for payload in message[1:]:
+            # Process snapshot
+            if 'as' in payload and 'bs' in payload:
+                orderbooks[channelID]['asks'] = SortedDict()
+                orderbooks[channelID]['bids'] = SortedDict()
+                processSnapshot(orderbook=orderbooks[channelID]['asks'], entries=payload['as'])
+                processSnapshot(orderbook=orderbooks[channelID]['bids'], entries=payload['bs'])
+                orderbooks[channelID]['timestamp']=getSnapshotTimestamp(payload['as'], payload['bs'])*1e3
+                return
 
-        # Process snapshot
-        if 'as' in payload and 'bs' in payload:        
-            processSnapshot(orderbook=orderbooks[channelID]['asks'], entries=payload['as'])
-            processSnapshot(orderbook=orderbooks[channelID]['bids'], entries=payload['bs'])
-            orderbooks[channelID]['timestamp']=getSnapshotTimestamp(payload['as'], payload['bs'])*1e3
-            return
-        
-        # Prodess deltas
-        if 'a' in payload:
-            processDelta(orderbook=orderbooks[channelID]['asks'],entries=payload['a'])
-            orderbooks[channelID]['timestamp']=getSnapshotTimestamp(payload['a'])*1e3
-        if 'b' in payload:
-            processDelta(orderbook=orderbooks[channelID]['bids'],entries=payload['b'])
-            orderbooks[channelID]['timestamp']=getSnapshotTimestamp(payload['b'])*1e3
+            # Prodess deltas
+            if 'a' in payload:
+                processDelta(orderbook=orderbooks[channelID]['asks'],entries=payload['a'])
+                orderbooks[channelID]['timestamp']=getSnapshotTimestamp(payload['a'])*1e3
+            if 'b' in payload:
+                processDelta(orderbook=orderbooks[channelID]['bids'],entries=payload['b'])
+                orderbooks[channelID]['timestamp']=getSnapshotTimestamp(payload['b'])*1e3
         
         
         # Data conversion
