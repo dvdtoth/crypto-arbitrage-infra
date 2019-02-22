@@ -80,7 +80,6 @@ def krakenMessageHandler(message):
                 processSnapshot(orderbook=orderbooks[channelID]['asks'], entries=payload['as'])
                 processSnapshot(orderbook=orderbooks[channelID]['bids'], entries=payload['bs'])
                 orderbooks[channelID]['timestamp']=getSnapshotTimestamp(payload['as'], payload['bs'])*1e3
-                return
 
             # Prodess deltas
             if 'a' in payload:
