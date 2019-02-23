@@ -15,7 +15,7 @@ kafka_producer = KafkaProducer(bootstrap_servers=config['kafka']['address'], val
 
 metrics = CWMetrics(config['exchange']['name'])
 # configurable parameters
-orderbookDepthInSubscription = 10
+orderbookDepthInSubscription = 1000
 consolidatedOrderbookDepth = 10
 
 orderbooks = dict()
@@ -34,8 +34,8 @@ def processDelta(orderbook,entries):
             try:
                 orderbook.pop(entry[0])
             except KeyError as e:
-                print('Error: Kraken asked to remove price level that doesn''t exist')
-                # metrics.putError()
+                logger.error('Error: Kraken asked to remove price level that doesn''t exist')
+                metrics.putError()
                 pass
 
 def getTop(orderbook, itemCount = 3, reverse=False):
@@ -93,6 +93,10 @@ def krakenMessageHandler(message):
         # Data conversion
         asks = getTop(orderbook=orderbooks[channelID]['asks'],itemCount=consolidatedOrderbookDepth)
         bids = getTop(orderbook=orderbooks[channelID]['bids'],itemCount=consolidatedOrderbookDepth,reverse=True)
+
+        if bids[0][0]>=asks[0][0]:
+          logger.error('Error' + orderbooks[channelID]['symbol'] + ': Bid ' + str(bids[0][0]) + ' is higher than ask ' + str(asks[0][0]) +'(gap:'+str((bids[0][0]-asks[0][0])/asks[0][0]*100)+'%)')
+
         payload = {}
         payload['exchange'] = "kraken"
         payload['symbol'] = orderbooks[channelID]['symbol']
