@@ -21,7 +21,7 @@ consolidatedOrderbookDepth = 10
 orderbooks = dict()
 
 def processSnapshot(orderbook,entries):
-    orderbook.update([(float(entry[0]), float(entry[1])) for entry in entries])
+    orderbook.update([(entry[0], float(entry[1])) for entry in entries])
 
 def getSnapshotTimestamp(orderbookA,orderbookB=[]):
     return max([float(entry[2]) for entry in orderbookA+orderbookB])
@@ -29,10 +29,10 @@ def getSnapshotTimestamp(orderbookA,orderbookB=[]):
 def processDelta(orderbook,entries):
     for entry in entries:
         if float(entry[1]) > 0:
-            orderbook.update([(float(entry[0]), float(entry[1]))])
+            orderbook.update([(entry[0], float(entry[1]))])
         else:
             try:
-                orderbook.pop(float(entry[0]))
+                orderbook.pop(entry[0])
             except KeyError as e:
                 print('Error: Kraken asked to remove price level that doesn''t exist')
                 # metrics.putError()
@@ -47,7 +47,7 @@ def getTop(orderbook, itemCount = 3, reverse=False):
         sliceEnd  = len(orderbook)
 
     for x in orderbook.islice(start=sliceBegin, stop=sliceEnd,reverse=reverse):
-        entries.append([x,orderbook[x]])
+        entries.append([float(x),orderbook[x]])
 
     return entries
 
