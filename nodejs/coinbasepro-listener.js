@@ -3,13 +3,13 @@ var _ = require('underscore');
 const BigNumber = require('bignumber.js');
 
 // Parameters
-var maxEntryCount = 3
+var maxEntryCount = 20
 var maxVolumeCount = Infinity
 var pairs = ['BCH/BTC', 'BTC/EUR', 'LTC/EUR', 'BTC/USD', 'BTC/EUR', 'ETH/USD',
-'ETH/EUR', 'BCH/EUR', 'ETH/BTC', 'BCH/USD']
+    'ETH/EUR', 'BCH/EUR', 'ETH/BTC', 'BCH/USD']
 
 const publicClient = new Gdax.PublicClient();
-const orderbookSync = new Gdax.OrderbookSync(pairs.map(x => x.replace('/','-')));
+const orderbookSync = new Gdax.OrderbookSync(pairs.map(x => x.replace('/', '-')));
 var asksConsolidated_old = new Array()
 var bidsConsolidated_old = new Array()
 
@@ -18,19 +18,10 @@ var kafka = require('kafka-node'),
     client = new kafka.KafkaClient({kafkaHost: "kafka.cryptoindex.me:9092"}),
     producer = new HighLevelProducer(client);
 
-// producer.on('ready', function () {
-//     console.log("Kafka producer is ready");
-//     // producerReady = true;
-// });
-      
-// producer.on('error', function (err) {
-//   console.error("Problem with producing to Kafka " + err);
-// })
-
 function getConsolidatedOrderbook(entries) {
     var orderbook = new Array()
     var price = entries[0].price
-    var size = new BigNumber(0)    
+    var size = new BigNumber(0)
     var sizeAccumulator = 0
     for (var i = 0; i < entries.length; i++) {
 
@@ -71,20 +62,23 @@ var messageHandler = function (data) {
                 "exchange": "coinbasepro",
                 "symbol": symbol,
                 "data": {
-                    "asks": asksConsolidated.map(x => [x[0].toNumber(),x[1].toNumber()]),
-                    "bids": bidsConsolidated.map(x => [x[0].toNumber(),x[1].toNumber()])
+                    "asks": asksConsolidated.map(x => [x[0].toNumber(), x[1].toNumber()]),
+                    "bids": bidsConsolidated.map(x => [x[0].toNumber(), x[1].toNumber()])
                 },
                 "timestamp": new Date(data.time).getTime()
             };
-                payloads = [
-                    { topic: "orderbook", messages: JSON.stringify(JSON.stringify(payload)) },
-                ];
-                producer.send(payloads, function (err, data) {
-                    if (err) throw err;
-                    console.log(data);
-                });
+            payloads = [
+                { topic: "orderbook", messages: JSON.stringify(JSON.stringify(payload)) },
+            ];
 
-            console.log(data.product_id + " asks:" + asksConsolidated.toString() + ", bids:" + bidsConsolidated.toString() + " delay:" + delay.toString() + "ms");
+            producer.send(payloads, function (err, data) {
+                if (err) {
+                    console.log(err);
+                }
+                // console.log(data);
+            });
+
+            // console.log(data.product_id + " asks:" + asksConsolidated.toString() + ", bids:" + bidsConsolidated.toString() + " delay:" + delay.toString() + "ms");
 
             asksConsolidated_old = asksConsolidated
             bidsConsolidated_old = bidsConsolidated
