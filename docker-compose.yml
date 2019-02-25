@@ -5,11 +5,13 @@ services:
     build: .
     environment:
       CONFIG: cmc-poller/cmc.yml
+  # coinbasepro:
+    # image: coinbasepro
+    # build: ./nodejs
   coinbasepro:
-    image: coinbasepro
-    build: ./nodejs
-    # environment:
-    #   CONFIG: exchange-poller/coinbasepro.yml
+    image: poller
+    environment:
+      CONFIG: exchange-poller/coinbasepro.yml
   bitstamp:
     image: poller
     environment:
