@@ -6,7 +6,8 @@ services:
     environment:
       CONFIG: cmc-poller/cmc.yml
   coinbasepro:
-    image: poller
+    image: coinbasepro
+    build: ./nodejs
     environment:
       CONFIG: exchange-poller/coinbasepro.yml
   bitstamp:
