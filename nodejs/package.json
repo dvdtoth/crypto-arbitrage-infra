@@ -1,0 +1,17 @@
+{
+  "name": "coinbasepro-listener",
+  "version": "1.0.0",
+  "description": "WS listener for CoinbasePro",
+  "main": "coinbasepro-listener.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node coinbasepro-listener.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "gdax": "^0.8.0",
+    "kafka-node": "^4.0.2",
+    "underscore": "^1.9.1"
+  }
+}
