@@ -18,3 +18,5 @@ consumer.subscribe([topic])
 for msg in consumer:
     data = json.loads(msg.value)
     print(data['exchange'])
+
+    # print(msg)
