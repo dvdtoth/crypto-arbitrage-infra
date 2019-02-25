@@ -8,8 +8,8 @@ services:
   coinbasepro:
     image: coinbasepro
     build: ./nodejs
-    environment:
-      CONFIG: exchange-poller/coinbasepro.yml
+    # environment:
+    #   CONFIG: exchange-poller/coinbasepro.yml
   bitstamp:
     image: poller
     environment:
