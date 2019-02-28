@@ -38,7 +38,8 @@ class CryptoArbOrderBook(cbpro.OrderBook):
                 payload['data'] = {}
                 payload['data']['asks'] = asksConsolidated
                 payload['data']['bids'] = bidsConsolidated
-                payload['timestamp'] = time.mktime(dateutil.parser.parse(message['time']).timetuple())
+                dt = dateutil.parser.parse(message['time'])
+                payload['timestamp'] = int(time.mktime(dt.timetuple()) * 1000 + dt.microsecond / 1000)
 
                 p = json.dumps(payload, separators=(',', ':'))
                 kafka_producer.send(config['kafka']['topic'], p)
