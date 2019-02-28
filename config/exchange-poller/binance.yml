@@ -9,8 +9,6 @@ exchange:
     - 'BCH/ETH'
     - 'ETC/BTC'
     - 'ETC/ETH'
-    - 'LSK/ETH'
-    - 'LSK/BTC'
     - 'LTC/USDT'
 proxy:
   address: http://172.31.16.12:3000

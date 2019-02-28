@@ -3,7 +3,8 @@ exchange:
   name: coinbasepro
   symbols: 
     - 'BTC/USD'
+    - 'BTC/EUR'
+
 kafka:
   address: kafka.cryptoindex.me:9092
   topic: orderbook
-
