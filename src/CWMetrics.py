@@ -81,7 +81,7 @@ class CWMetrics:
             self.count_samples = 0
             self.last_put_time = int(time.time())
         # Send batches of 20
-        if len(self.metric_data) == 20:
+        if len(self.metric_data) >= 15:
 #            print("SENDING BATCH")
  #           print(self.metric_data)
             response = self.cloudwatch.put_metric_data(Namespace='TEST/ORDERBOOK', MetricData=self.metric_data)
