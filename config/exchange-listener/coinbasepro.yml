@@ -1,0 +1,17 @@
+handler: coinbasepro-listener.py
+exchange: 
+  name: coinbasepro
+  symbols: 
+    - 'BCH/BTC'
+    - 'BTC/EUR'
+    - 'LTC/EUR'
+    - 'BTC/USD'
+    - 'BTC/EUR'
+    - 'ETH/USD'
+    - 'ETH/EUR'
+    - 'BCH/EUR'
+    - 'ETH/BTC'
+    - 'BCH/USD'
+  address: kafka.cryptoindex.me:9092
+  topic: orderbook
+
