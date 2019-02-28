@@ -12,6 +12,7 @@ exchange:
     - 'BCH/EUR'
     - 'ETH/BTC'
     - 'BCH/USD'
+kafka:
   address: kafka.cryptoindex.me:9092
   topic: orderbook
 
