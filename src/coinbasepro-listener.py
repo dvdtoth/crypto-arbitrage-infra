@@ -18,7 +18,7 @@ metrics = CWMetrics(config['exchange']['name'])
 kafka_producer = KafkaProducer(bootstrap_servers=config['kafka']['address'], value_serializer=lambda v: json.dumps(v).encode('utf-8'))
 
 class CryptoArbOrderBook(cbpro.OrderBook):
-    def __init__(self, maxEntryCount=10, timeLimiterSeconds=0.05,product_id='BTC-USD', log_to=None):
+    def __init__(self, maxEntryCount=10, timeLimiterSeconds=0.01,product_id='BTC-USD', log_to=None):
         self.maxEntryCount = maxEntryCount
         self.asksConsolidatedOld = []
         self.bidsConsolidatedOld = []
