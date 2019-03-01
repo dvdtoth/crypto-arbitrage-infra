@@ -106,7 +106,8 @@ for process in processes:
     process.daemon = True
     process.start()
 
-input("Press Enter to stop")
+while True:
+    time.sleep(1)
 
 stopProcessesEvent.set()
 for process in processes:
