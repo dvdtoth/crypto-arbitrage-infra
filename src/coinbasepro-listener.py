@@ -36,7 +36,7 @@ class CryptoArbOrderBook(cbpro.OrderBook):
                 if len(book["asks"])>0 and len(book["bids"])>0:
                     asksConsolidated = self.getConsolidatedOrderbook(book["asks"], reverse=False)
                     bidsConsolidated = self.getConsolidatedOrderbook(book["bids"], reverse=True)
-                    print("asks:"+str(asksConsolidated)+", bids:"+str(bidsConsolidated))
+                    #print("asks:"+str(asksConsolidated)+", bids:"+str(bidsConsolidated))
 
                     if self.asksConsolidatedOld != asksConsolidated or self.bidsConsolidatedOld != bidsConsolidated:
                         payload = {}
