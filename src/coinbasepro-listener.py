@@ -28,7 +28,11 @@ class CryptoArbOrderBook(cbpro.OrderBook):
         super().__init__(product_id=product_id, log_to=log_to)
 
     def on_message(self, message):
-        super().on_message(message)
+        try:
+            super().on_message(message)
+        except Exception as err:
+            logger.error("Error during calling cbpro.Orderbook on_message:" + str(err))
+            return
                 
         if (time.time() - self.timeLastRun) > self.timeLimiterSeconds:
             try:
