@@ -21,4 +21,3 @@ pysher
 websockets
 sortedcontainers
 kraken-wsclient-py
-cbpro
