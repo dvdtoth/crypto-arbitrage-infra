@@ -10,7 +10,7 @@ services:
     environment:
       CONFIG: cmc-poller/cmc.yml
   coinbasepro:
-    image: pollerCBPro
+    image: pollercbpro
     build:
       context: .
       dockerfile: Dockerfile
