@@ -14,17 +14,18 @@ from CWMetrics import CWMetrics
 with open(sys.argv[1], 'r') as config_file:
     config = yaml.load(config_file)
 
-metrics = CWMetrics(config['exchange']['name'])
-
-kafka_producer = KafkaProducer(bootstrap_servers=config['kafka']['address'], value_serializer=lambda v: json.dumps(v).encode('utf-8'))
 
 class CryptoArbOrderBook(cbpro.OrderBook):
-    def __init__(self, maxEntryCount=10, timeLimiterSeconds=0.025,product_id='BTC-USD', log_to=None):
+    def __init__(self, maxEntryCount=10, timeLimiterSeconds=0.025, product_id='BTC-USD', log_to=None):
         self.maxEntryCount = maxEntryCount
         self.asksConsolidatedOld = []
         self.bidsConsolidatedOld = []
         self.timeLastRun = time.time()
         self.timeLimiterSeconds = timeLimiterSeconds
+        self.metrics = CWMetrics(config['exchange']['name'])
+        self.kafka_producer = KafkaProducer(bootstrap_servers=config['kafka']['address'],
+                                            value_serializer=lambda v: json.dumps(v).encode('utf-8'))
+
         super().__init__(product_id=product_id, log_to=log_to)
 
     def on_message(self, message):
@@ -53,17 +54,17 @@ class CryptoArbOrderBook(cbpro.OrderBook):
                         payload['timestamp'] = int(time.mktime(dt.timetuple()) * 1000 + dt.microsecond / 1000)
 
                         p = json.dumps(payload, separators=(',', ':'))
-                        kafka_producer.send(config['kafka']['topic'], p)
+                        self.kafka_producer.send(config['kafka']['topic'], p)
 
                         logger.info("Received " + payload['symbol'] + " prices from coinbasepro")
-                        metrics.put(payload['timestamp'])
+                        self.metrics.put(payload['timestamp'])
 
                         self.asksConsolidatedOld = asksConsolidated
                         self.bidsConsolidatedOld = bidsConsolidated
 
                     if book["asks"][0][0] <= book["bids"][-1][0]:
                         logger.error("Bid higher than ask")
-                        metrics.putError()
+                        self.metrics.putError()
             except Exception as err:
                 logger.error("Error during message processing:" + str(err))
             finally:
