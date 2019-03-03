@@ -1,9 +1,9 @@
 FROM python:3.6.8
-
+ARG REQUIREMENTSFILE
 WORKDIR /app
 
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+COPY $REQUIREMENTSFILE ./
+RUN pip install --no-cache-dir -r $REQUIREMENTSFILE
 COPY src/ ./src
 COPY config/ ./config
 
