@@ -2,11 +2,20 @@ version: '3.5'
 services:
   cmc:
     image: poller
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        REQUIREMENTSFILE: requirements.txt
     environment:
       CONFIG: cmc-poller/cmc.yml
   coinbasepro:
-    image: poller
+    image: pollerCBPro
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        REQUIREMENTSFILE: requirements-CBPro.txt
     environment:
       CONFIG: exchange-listener/coinbasepro.yml
   bitstamp:
