@@ -114,7 +114,7 @@ while True:
         process.daemon = True
         process.start()
 
-    time.sleep(10)
+    time.sleep(3600)
 
     stopProcessesEvent.set()
     for process in processes:
