@@ -9,7 +9,7 @@ exchange:
     - 'BCH/EUR'
     - 'BCH/BTC'
     - 'LTC/EUR'
-    - 'ETH/EUR' 
+    - 'ETH/EUR'
     - 'XRP/BTC'
     - 'LTC/BTC'
 proxy:
