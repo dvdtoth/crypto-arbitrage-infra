@@ -30,6 +30,7 @@ class CryptoArbOrderBook(cbpro.OrderBook):
 
     def on_message(self, message):
         try:
+            logger.info(message)
             super().on_message(message)
         except Exception as err:
             logger.error("Error during calling cbpro.Orderbook on_message:" + str(err))
@@ -103,20 +104,21 @@ def CryptoArbOrderBookProcess(pair,stopProcessesEvent):
 
 pairs = config['exchange']['symbols']
 
-stopProcessesEvent = Event()
-processes = [Process(target=CryptoArbOrderBookProcess, args=(pair,stopProcessesEvent)) for pair in pairs]
-
-# start order books
-for process in processes:
-    process.daemon = True
-    process.start()
 
 while True:
-    time.sleep(1)
+    stopProcessesEvent = Event()
+    processes = [Process(target=CryptoArbOrderBookProcess, args=(pair, stopProcessesEvent)) for pair in pairs]
 
-stopProcessesEvent.set()
-for process in processes:
-    process.join()
+    # start order books
+    for process in processes:
+        process.daemon = True
+        process.start()
+
+    time.sleep(10)
+
+    stopProcessesEvent.set()
+    for process in processes:
+        process.join()
 
 logger.info("coinbaseproWebsocket exited normally. Bye.")
 
