@@ -16,7 +16,7 @@ with open(sys.argv[1], 'r') as config_file:
 
 
 class CryptoArbOrderBook(cbpro.OrderBook):
-    def __init__(self, maxEntryCount=10, timeLimiterSeconds=0.025, product_id='BTC-USD', log_to=None):
+    def __init__(self, maxEntryCount=10, timeLimiterSeconds=0.05, product_id='BTC-USD', log_to=None):
         self.maxEntryCount = maxEntryCount
         self.asksConsolidatedOld = []
         self.bidsConsolidatedOld = []
@@ -30,7 +30,6 @@ class CryptoArbOrderBook(cbpro.OrderBook):
 
     def on_message(self, message):
         try:
-            logger.info(message)
             super().on_message(message)
         except Exception as err:
             logger.error("Error during calling cbpro.Orderbook on_message:" + str(err))
@@ -57,7 +56,7 @@ class CryptoArbOrderBook(cbpro.OrderBook):
                         p = json.dumps(payload, separators=(',', ':'))
                         self.kafka_producer.send(config['kafka']['topic'], p)
 
-                        logger.info("Received " + payload['symbol'] + " prices from coinbasepro")
+                        # logger.info("Received " + payload['symbol'] + " prices from coinbasepro")
                         self.metrics.put(payload['timestamp'])
 
                         self.asksConsolidatedOld = asksConsolidated
