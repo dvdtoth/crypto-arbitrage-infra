@@ -6,7 +6,6 @@ exchange:
     - 'XRP/BTC'
     - 'LTC/BTC'
     - 'ETH/BTC'
-    - 'BCH/ETH'
     - 'ETC/BTC'
     - 'ETC/ETH'
     - 'LTC/USDT'
