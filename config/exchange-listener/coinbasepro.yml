@@ -4,7 +4,14 @@ exchange:
   symbols: 
     - 'BTC/USD'
     - 'BTC/EUR'
-
+    - 'BTC/USD'
+    - 'BCH/USD'
+    - 'XRP/USD'
+    - 'LTC/EUR'
+    - 'LTC/USD'
+    - 'ETH/BTC'
+    - 'BCH/BTC'
+    - 'XRP/BTC'
 kafka:
   address: kafka.cryptoindex.me:9092
   topic: orderbook
