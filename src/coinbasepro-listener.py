@@ -16,7 +16,7 @@ with open(sys.argv[1], 'r') as config_file:
 
 
 class CryptoArbOrderBook(cbpro.OrderBook):
-    def __init__(self, maxEntryCount=20, timeLimiterSeconds=0.05, product_id='BTC-USD', log_to=None):
+    def __init__(self, maxEntryCount=30, timeLimiterSeconds=0.05, product_id='BTC-USD', log_to=None):
         self.maxEntryCount = maxEntryCount
         self.asksConsolidatedOld = []
         self.bidsConsolidatedOld = []
