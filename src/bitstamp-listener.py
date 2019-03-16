@@ -30,12 +30,12 @@ def orderbookHandler(symbols, dataraw):
     payload['data']['asks'] = list(map(lambda entry:[float(entry[0]), float(entry[1])], data['asks']))
     payload['data']['bids'] = list(map(lambda entry:[float(entry[0]), float(entry[1])], data['bids']))
     payload['timestamp'] = int(float(data['microtimestamp'])/1e3)
-    print(payload['timestamp'])
+    # print(payload['timestamp'])
 
     p = json.dumps(payload, separators=(',', ':'))
     kafka_producer.send(config['kafka']['topic'], p)
 
-    logger.info("Received " + symbolBase+"/" + symbolQuote + " prices from Bitstamp")
+    # logger.info("Received " + symbolBase+"/" + symbolQuote + " prices from Bitstamp")
     metrics.put(payload['timestamp'])
 
 def connectHandler(data):
