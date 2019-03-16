@@ -1,16 +1,24 @@
 handler: binance-listener.py
 exchange: 
   name: binance
-  symbols: 
-    - 'BTC/USDT'
-    - 'BCHSV/USDT'
-    - 'BCHABC/USDT'
-    - 'XRP/USDT'
-    - 'LTC/USDT'
-    - 'ETH/BTC'
-    - 'BCHABC/BTC'
-    - 'BCHSV/BTC'
+  symbols:
+    - 'BCH/BTC'
+    - 'LTC/BTC'
     - 'XRP/BTC'
+    - 'EOS/BTC'
+    - 'ADA/BTC'
+    - 'ETH/BTC'
+    - 'XLM/BTC'
+    - 'XMR/BTC'
+    - 'BTC/USDC'
+    - 'ZEC/BTC'
+    - 'DASH/BTC'
+    - 'ETC/BTC'
+    - 'ZRX/BTC'
+    - 'EOS/ETH'
+    - 'ETH/USDC'
+    - 'ADA/ETH'
+    - 'ETC/ETH'
 kafka:
   address: kafka.cryptoindex.me:9092
   topic: orderbook

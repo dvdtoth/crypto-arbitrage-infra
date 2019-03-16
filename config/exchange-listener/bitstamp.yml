@@ -1,17 +1,21 @@
 handler: bitstamp-listener.py
 exchange: 
   name: bitstamp
-  symbols: 
-    - 'BTC/EUR'
-    - 'ETH/BTC'
+  symbols:
     - 'BTC/USD'
-    - 'ETH/USD'
-    - 'BCH/EUR'
-    - 'BCH/BTC'
-    - 'LTC/EUR'
+    - 'BTC/EUR'
+    - 'BCH/USD'
     - 'ETH/EUR'
-    - 'XRP/BTC'
+    - 'BCH/EUR'
+    - 'XRP/EUR'
+    - 'LTC/EUR'
+    - 'ETH/BTC'
     - 'LTC/BTC'
+    - 'BCH/BTC'
+    - 'XRP/BTC'
+    - 'ETH/USD'
+    - 'LTC/USD'
+    - 'XRP/USD'
 kafka:
   address: kafka.cryptoindex.me:9092
   topic: orderbook
