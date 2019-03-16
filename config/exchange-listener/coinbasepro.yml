@@ -1,17 +1,25 @@
 handler: coinbasepro-listener.py
 exchange: 
   name: coinbasepro
-  symbols: 
-    - 'BTC/USD'
+  symbols:
+    - 'BTC/GBP'
+    - 'ETH/GBP'
     - 'BTC/EUR'
-    - 'BTC/USD'
-    - 'BCH/USD'
-    - 'XRP/USD'
+    - 'BCH/EUR'
+    - 'ETH/EUR'
+    - 'ETC/EUR'
     - 'LTC/EUR'
-    - 'LTC/USD'
+    - 'XLM/EUR'
+    - 'XRP/EUR'
     - 'ETH/BTC'
+    - 'LTC/BTC'
     - 'BCH/BTC'
+    - 'ETC/BTC'
+    - 'XLM/BTC'
     - 'XRP/BTC'
+    - 'ZRX/BTC'
+    - 'BTC/USDC'
+    - 'ETH/USDC'
 kafka:
   address: kafka.cryptoindex.me:9092
   topic: orderbook

@@ -1,17 +1,35 @@
 handler: kraken-listener.py
 exchange: 
   name: kraken
-  symbols: 
-    - 'BTC/USD'
+  symbols:
     - 'BTC/EUR'
-    - 'BTC/USD'
+    - 'BTC/GBP'
     - 'BCH/USD'
-    - 'XRP/USD'
-    - 'LTC/EUR'
-    - 'LTC/USD'
-    - 'ETH/BTC'
+    - 'BCH/EUR'
     - 'BCH/BTC'
+    - 'ADA/BTC'
+    - 'ADA/ETH'
+    - 'BTC/USD'
+    - 'DASH/BTC'
+    - 'EOS/BTC'
+    - 'EOS/ETH'
+    - 'ETC/EUR'
+    - 'ETC/BTC'
+    - 'ETC/ETH'
+    - 'ETH/USD'
+    - 'ETH/EUR'
+    - 'ETH/GBP'
+    - 'ETH/BTC'
+    - 'LTC/USD'
+    - 'LTC/EUR'
+    - 'LTC/BTC'
+    - 'XMR/BTC'
+    - 'XRP/USD'
+    - 'XRP/EUR'
     - 'XRP/BTC'
+    - 'XLM/EUR'
+    - 'XLM/BTC'
+    - 'ZEC/BTC'
 kafka:
   address: kafka.cryptoindex.me:9092
   topic: orderbook
