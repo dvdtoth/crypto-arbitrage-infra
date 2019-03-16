@@ -61,6 +61,9 @@ pairBinanceNameMapping = dict()
 
 for pair in config['exchange']['symbols']:
     pairSplit = pair.lower().split('/')
+    if pairSplit[0] == "BCH":
+        pairSplit[0] = "BCHABC"
+
     pairElement = pairSplit[0] + pairSplit[1] + '@depth' + str(orderbookDepth)
     pairList.append(pairElement)
     pairBinanceNameMapping[pairElement] = pair
