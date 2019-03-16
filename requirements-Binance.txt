@@ -6,5 +6,5 @@ asynctest==0.12.2
 attrs==18.2.0
 kafka-python==1.4.3
 PyYAML==3.13
-boto3
-python-binance
+boto3==1.7.35
+python-binance==0.7.1
