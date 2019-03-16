@@ -49,7 +49,7 @@ def process_message(msg):
     payload['data'] = {}
     payload['data']['asks'] = list(map(lambda entry:[float(entry[0]), float(entry[1])], msg['data']['asks']))
     payload['data']['bids'] = list(map(lambda entry:[float(entry[0]), float(entry[1])], msg['data']['bids']))
-    payload['timestamp'] = time.time()
+    payload['timestamp'] = time.time()*1000
 
     p = json.dumps(payload, separators=(',', ':'))
     kafka_producer.send(config['kafka']['topic'], p)
