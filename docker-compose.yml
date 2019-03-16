@@ -18,6 +18,16 @@ services:
         REQUIREMENTSFILE: requirements-CBPro.txt
     environment:
       CONFIG: exchange-listener/coinbasepro.yml
+  binance:
+    image: pollerbinance
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        REQUIREMENTSFILE: requirements-Binance.txt
+    environment:
+      CONFIG: exchange-listener/binance.yml
+
   bitstamp:
     image: poller
     environment:
@@ -30,10 +40,6 @@ services:
     image: poller
     environment:
       CONFIG: exchange-poller/poloniex.yml
-  binance:
-    image: poller
-    environment:
-      CONFIG: exchange-poller/binance.yml
   oanda:
     image: poller
     environment:

@@ -1,0 +1,16 @@
+handler: binance-listener.py
+exchange: 
+  name: binance
+  symbols: 
+    - 'BTC/USDT'
+    - 'BCHSV/USDT'
+    - 'BCHABC/USDT'
+    - 'XRP/USDT'
+    - 'LTC/USDT'
+    - 'ETH/BTC'
+    - 'BCHABC/BTC'
+    - 'BCHSV/BTC'
+    - 'XRP/BTC'
+kafka:
+  address: kafka.cryptoindex.me:9092
+  topic: orderbook
