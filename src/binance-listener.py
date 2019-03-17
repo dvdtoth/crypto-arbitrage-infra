@@ -33,7 +33,7 @@ def getCredentials():
 
 # configurable parameters
 orderbookDepth = 20
-restartPeriodSeconds = 10#0.5*3600
+restartPeriodSeconds = 0.5*3600
 
 
 def process_message(kafka_producer, metrics, msg):
@@ -50,7 +50,7 @@ def process_message(kafka_producer, metrics, msg):
         p = json.dumps(payload, separators=(',', ':'))
         kafka_producer.send(config['kafka']['topic'], p)
         metrics.put(timestamp)
-        print(str(metrics.last_put_time))
+        #print(p)
     except Exception as error:
         logger.error("Error in Binance web socket connection: " + type(error).__name__ + " " + str(error.args))
         metrics.putError()
