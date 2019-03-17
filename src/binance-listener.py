@@ -50,7 +50,7 @@ def process_message(kafka_producer, metrics, msg):
         p = json.dumps(payload, separators=(',', ':'))
         kafka_producer.send(config['kafka']['topic'], p)
         metrics.put(timestamp)
-        print(p)
+        print(str(metrics.last_put_time))
     except Exception as error:
         logger.error("Error in Binance web socket connection: " + type(error).__name__ + " " + str(error.args))
         metrics.putError()
@@ -70,7 +70,7 @@ def CryptoArbBinanceOrderBookProcess(stopProcessesEvent):
         metrics = CWMetrics(config['exchange']['name'])
 
         bm = BinanceSocketManager(client)
-        bm.start_multiplex_socket(pairList, partial(process_message, kafka_producer, metrics))
+        bm.start_multiplex_socket(pairList, partial(process_message, kafka_producer=kafka_producer, metrics=metrics))
         bm.start()
         logger.info('BinanceSocketManager started')
         stopProcessesEvent.wait()
