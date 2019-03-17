@@ -36,7 +36,7 @@ def getCredentials():
 
 # configurable parameters
 orderbookDepth = 20
-restartPeriodSeconds = 3600
+restartPeriodSeconds = 5
 
 credentials = getCredentials()
 client = Client(api_key=credentials['api_key'],
@@ -58,7 +58,7 @@ def process_message(msg):
         p = json.dumps(payload, separators=(',', ':'))
         kafka_producer.send(config['kafka']['topic'], p)
         metrics.put(timestamp)
-
+        print(p)
     except Exception as error:
         logger.error("Error in Binance web socket connection: " + type(error).__name__ + " " + str(error.args))
         metrics.putError()
@@ -81,8 +81,10 @@ while True:
         bm = BinanceSocketManager(client)
         bm.start_multiplex_socket(pairList, process_message)
         bm.start()
+        logger.info('BinanceSocketManager started')
         time.sleep(restartPeriodSeconds)
         bm.close()
+        logger.info('BinanceSocketManager closed')
     except Exception as error:
         logger.error("Error restarting Binance Socket Manager: " + type(error).__name__ + " " + str(error.args))
         metrics.putError()
