@@ -46,15 +46,19 @@ client = Client(api_key=credentials['api_key'],
 def process_message(msg):
     try:
         payload = dict()
+
+        timestamp = time.time()*1000
         payload['exchange'] = "binance"
         payload['symbol'] = pairBinanceNameMapping[msg['stream']]
         payload['data'] = {}
         payload['data']['asks'] = list(map(lambda entry:[float(entry[0]), float(entry[1])], msg['data']['asks']))
         payload['data']['bids'] = list(map(lambda entry:[float(entry[0]), float(entry[1])], msg['data']['bids']))
-        payload['timestamp'] = time.time()*1000
+        payload['timestamp'] = timestamp
 
         p = json.dumps(payload, separators=(',', ':'))
         kafka_producer.send(config['kafka']['topic'], p)
+        metrics.put(timestamp)
+
     except Exception as error:
         logger.error("Error in Binance web socket connection: " + type(error).__name__ + " " + str(error.args))
         metrics.putError()
