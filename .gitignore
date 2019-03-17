@@ -2,3 +2,5 @@
 .vscode
 __pycache__/
 node_modules/
+**/.idea/workspace.xml
+**/.idea/tasks.xml
