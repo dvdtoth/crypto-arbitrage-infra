@@ -40,7 +40,7 @@ def process_message(kafka_producer, metrics, msg):
     try:
         payload = dict()
         timestamp = time.time()*1000
-        payload['exchange'] = "binance"
+        payload['exchange'] = config['exchange']['name']
         payload['symbol'] = pairBinanceNameMapping[msg['stream']]
         payload['data'] = {}
         payload['data']['asks'] = list(map(lambda entry: [float(entry[0]), float(entry[1])], msg['data']['asks']))
@@ -76,7 +76,7 @@ def CryptoArbBinanceOrderBookProcess(stopProcessesEvent):
         bm.close()
         logger.info('BinanceSocketManager closed')
     except Exception as error:
-        logger.error("Error restarting Binance Socket Manager: " + type(error).__name__ + " " + str(error.args))
+        logger.error("Error CryptoArbBinanceOrderBookProcess: " + type(error).__name__ + " " + str(error.args))
         metrics.putError()
 
 
