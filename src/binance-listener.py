@@ -61,12 +61,13 @@ def CryptoArbBinanceOrderBookProcess(stopProcessesEvent):
         # Init Kafka producer
         kafka_producer = KafkaProducer(bootstrap_servers=config['kafka']['address'],
                                        value_serializer=lambda v: json.dumps(v).encode('utf-8'))
-        # Init CloudWatch metrics
-        metrics = CWMetrics(config['exchange']['name'])
 
         credentials = getCredentials()
         client = Client(api_key=credentials['api_key'],
                         api_secret=credentials['api_secret'])
+
+        # Init CloudWatch metrics
+        metrics = CWMetrics(config['exchange']['name'])
 
         bm = BinanceSocketManager(client)
         bm.start_multiplex_socket(pairList, partial(process_message, kafka_producer, metrics))
