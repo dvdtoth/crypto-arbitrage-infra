@@ -70,7 +70,7 @@ def CryptoArbBinanceOrderBookProcess(stopProcessesEvent):
         metrics = CWMetrics(config['exchange']['name'])
 
         bm = BinanceSocketManager(client)
-        bm.start_multiplex_socket(pairList, partial(process_message, kafka_producer=kafka_producer, metrics=metrics))
+        bm.start_multiplex_socket(pairList, partial(process_message, kafka_producer, metrics))
         bm.start()
         logger.info('BinanceSocketManager started')
         stopProcessesEvent.wait()
