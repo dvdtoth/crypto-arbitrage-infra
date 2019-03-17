@@ -17,7 +17,6 @@ exchange:
     - 'ETC/BTC'
     - 'XLM/BTC'
     - 'XRP/BTC'
-    - 'ZRX/BTC'
     - 'BTC/USDC'
     - 'ETH/USDC'
 kafka:
