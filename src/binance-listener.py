@@ -36,7 +36,7 @@ def getCredentials():
 
 # configurable parameters
 orderbookDepth = 20
-restartPeriodSeconds = 3*3600
+restartPeriodSeconds = 3600
 
 credentials = getCredentials()
 client = Client(api_key=credentials['api_key'],
