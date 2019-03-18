@@ -16,5 +16,5 @@ urllib3
 yarl==1.1.0
 python-dateutil
 boto3
-websocket
+websocket-client
 sortedcontainers
