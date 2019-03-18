@@ -37,9 +37,18 @@ services:
     environment:
       CONFIG: exchange-listener/kraken.yml
   poloniex:
-    image: poller
+    image: pollerpoloniex
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        REQUIREMENTSFILE: requirements-Poloniex.txt
     environment:
-      CONFIG: exchange-poller/poloniex.yml
+      CONFIG: exchange-listener/poloniex.yml
+  #poloniex:
+  #  image: poller
+  #  environment:
+  #    CONFIG: exchange-poller/poloniex.yml
   oanda:
     image: poller
     environment:
