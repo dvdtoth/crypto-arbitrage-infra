@@ -1,0 +1,38 @@
+handler: poloniex-listener.py
+exchange: 
+  name: poloniex
+  symbols:
+    - 'DASH/BTC'
+    - 'LTC/BTC'
+    - 'XEM/BTC'
+    - 'XMR/BTC'
+    - 'XRP/BTC'
+    - 'BTC/USDT'
+    - 'LTC/USDT'
+    - 'XMR/USDT'
+    - 'XRP/USDT'
+    - 'ETH/BTC'
+    - 'ETH/USDT'
+    - 'LSK/BTC'
+    - 'LSK/ETH'
+    - 'STEEM/BTC'
+    - 'STEEM/ETH'
+    - 'ETC/BTC'
+    - 'ETC/ETH'
+    - 'ETC/USDT'
+    - 'ZEC/BTC'
+    - 'ZEC/ETH'
+    - 'BCH/BTC'
+    - 'BCH/USDT'
+    - 'EOS/BTC'
+    - 'EOS/ETH'
+    - 'EOS/USDT'
+    - 'BTC/USDC'
+    - 'ETH/USDC'
+    - 'BCH/USDC'
+    - 'XRP/USDC'
+    - 'LTC/USDC'
+
+kafka:
+  address: kafka.cryptoindex.me:9092
+  topic: orderbook
