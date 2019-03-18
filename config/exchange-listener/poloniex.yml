@@ -13,8 +13,6 @@ exchange:
     - 'XRP/USDT'
     - 'ETH/BTC'
     - 'ETH/USDT'
-    - 'LSK/BTC'
-    - 'LSK/ETH'
     - 'ETC/BTC'
     - 'ETC/ETH'
     - 'ETC/USDT'
