@@ -17,7 +17,6 @@ kafka_producer = KafkaProducer(bootstrap_servers=config['kafka']['address'], val
 
 metrics = CWMetrics(config['exchange']['name'])
 # configurable parameters
-orderbookDepthInSubscription = 1000
 consolidatedOrderbookDepth = 30
 
 orderbooks = dict()
