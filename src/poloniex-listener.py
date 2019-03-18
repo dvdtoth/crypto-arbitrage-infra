@@ -64,7 +64,7 @@ def on_message(ws, message):
             if json_msg[2][0][0] == 'i':
                 channelID = json_msg[0]
                 orderbooks[channelID] = dict()
-                orderbooks[channelID]['symbol'] = '/'.join(json_msg[2][0][1]['currencyPair'].split('_'))
+                orderbooks[channelID]['symbol'] = '/'.join(json_msg[2][0][1]['currencyPair'].split('_')[::-1])
                 orderbooks[channelID]['asks'] = SortedDict()
                 orderbooks[channelID]['bids'] = SortedDict()
                 orderbooks[channelID]['timestamp'] = None
@@ -119,7 +119,7 @@ def on_message(ws, message):
         p = json.dumps(payload, separators=(',', ':'))
         kafka_producer.send(config['kafka']['topic'], p)
 
-        #logger.info(orderbooks[channelID]['symbol'] + " asks:"+str(asks)+", bids:"+str(bids) + " timestamp:"+str(payload['timestamp']))
+        logger.info(orderbooks[channelID]['symbol'] + " asks:"+str(asks)+", bids:"+str(bids) + " timestamp:"+str(payload['timestamp']))
         metrics.put(payload['timestamp'])
 
     except Exception as error:
