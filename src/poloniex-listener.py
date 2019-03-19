@@ -8,19 +8,16 @@ from CWMetrics import CWMetrics
 import websocket
 import threading
 import time
+from multiprocessing import Process, Event
+from functools import partial
 
 # Parse config
 with open(sys.argv[1], 'r') as config_file:
     config = yaml.load(config_file)
 
-kafka_producer = KafkaProducer(bootstrap_servers=config['kafka']['address'], value_serializer=lambda v: json.dumps(v).encode('utf-8'))
-
-metrics = CWMetrics(config['exchange']['name'])
 # configurable parameters
 consolidatedOrderbookDepth = 30
-
-orderbooks = dict()
-
+restartPeriodSeconds = 1*3600
 
 def processSnapshot(orderbook,entries):
     updateList = [(float(entry[0]), float(entry[1])) for entry in entries]
@@ -54,7 +51,7 @@ def getTop(orderbook, itemCount = 3, reverse=False):
     return entries
 
         
-def on_message(ws, message):
+def on_message(kafka_producer, metrics, orderbooks, ws, message):
     try:
         json_msg = json.loads(message)
 
@@ -118,7 +115,7 @@ def on_message(ws, message):
         p = json.dumps(payload, separators=(',', ':'))
         kafka_producer.send(config['kafka']['topic'], p)
 
-        #logger.info(orderbooks[channelID]['symbol'] + " asks:"+str(asks)+", bids:"+str(bids) + " timestamp:"+str(payload['timestamp']))
+        logger.info(orderbooks[channelID]['symbol'] + " asks:"+str(asks)+", bids:"+str(bids) + " timestamp:"+str(payload['timestamp']))
         metrics.put(payload['timestamp'])
 
     except Exception as error:
@@ -126,9 +123,9 @@ def on_message(ws, message):
         metrics.putError()
 
 
-def on_error(ws, error):
+def on_error(metrics, ws, error):
     logger.error(error)
-
+    metrics.putError()
 
 def on_close(ws):
     logger.info("WebSocket closed")
@@ -144,12 +141,50 @@ def on_open(ws):
     threading.Thread(target=subscribe).start()
 
 
-if __name__ == "__main__":
-    websocket.enableTrace(False)
-    ws = websocket.WebSocketApp("wss://api2.poloniex.com/",
-                                on_message=on_message,
-                                on_error=on_error,
-                                on_close=on_close)
+def CryptoArbOrderBookProcess(stopProcessesEvent):
+    try:
+        # Init Kafka producer
+        kafka_producer = KafkaProducer(bootstrap_servers=config['kafka']['address'],
+                                       value_serializer=lambda v: json.dumps(v).encode('utf-8'))
 
-    ws.on_open = on_open
-    ws.run_forever()
+        # Init CloudWatch metrics
+        metrics = CWMetrics(config['exchange']['name'])
+
+        # Init orderbooks dictionary
+        orderbooks = dict()
+
+        websocket.enableTrace(False)
+        ws = websocket.WebSocketApp("wss://api2.poloniex.com/",
+                                    on_message=partial(on_message, kafka_producer, metrics, orderbooks),
+                                    on_error=partial(on_error, metrics),
+                                    on_close=on_close)
+
+        ws.on_open = on_open
+
+        ws_thread = threading.Thread(target=ws.run_forever)
+        ws_thread.daemon = True
+        ws_thread.start()
+        logger.info('Poloniex websocket started')
+        stopProcessesEvent.wait()
+        logger.info('Poloniex websocket closed')
+
+    except Exception as error:
+        logger.error(type(error).__name__ + " " + str(error.args))
+        metrics.putError()
+
+
+if __name__ == "__main__":
+    # Keep on restarting the websocket periodically
+    while True:
+        stopProcessesEvent = Event()
+        process = Process(target=CryptoArbOrderBookProcess, args=(stopProcessesEvent,))
+
+        process.daemon = True
+        process.start()
+
+        time.sleep(restartPeriodSeconds)
+
+        stopProcessesEvent.set()
+        process.join()
+
+    logger.info("binance-listener exited normally. Bye.")
