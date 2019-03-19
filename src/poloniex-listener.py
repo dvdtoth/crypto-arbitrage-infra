@@ -24,7 +24,7 @@ def processSnapshot(orderbook,entries):
     orderbook.update(updateList)
 
 
-def processDelta(orderbook,entries):
+def processDelta(orderbook, entries, metrics):
     for entry in entries:
         if float(entry[1]) > 0:
             orderbook.update([(float(entry[0]), float(entry[1]))])
@@ -93,8 +93,8 @@ def on_message(kafka_producer, metrics, orderbooks, ws, message):
                     delta_asks.append([float(entry[2]),float(entry[3])])
 
         channelID = json_msg[0]
-        processDelta(orderbook=orderbooks[channelID]['asks'], entries=delta_asks)
-        processDelta(orderbook=orderbooks[channelID]['bids'], entries=delta_bids)
+        processDelta(orderbook=orderbooks[channelID]['asks'], entries=delta_asks, metrics=metrics)
+        processDelta(orderbook=orderbooks[channelID]['bids'], entries=delta_bids, metrics=metrics)
         orderbooks[channelID]['timestamp'] = time.time()*1e3
 
         # Data conversion
