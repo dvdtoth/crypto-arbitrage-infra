@@ -10,6 +10,9 @@ import time
 from multiprocessing import Process, Event
 from CWMetrics import CWMetrics
 
+
+restartPeriodSeconds = 0.5*3600
+
 # Parse config
 with open(sys.argv[1], 'r') as config_file:
     config = yaml.load(config_file)
@@ -113,7 +116,7 @@ while True:
         process.daemon = True
         process.start()
 
-    time.sleep(3600)
+    time.sleep(restartPeriodSeconds)
 
     stopProcessesEvent.set()
     for process in processes:
