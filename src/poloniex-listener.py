@@ -17,7 +17,7 @@ with open(sys.argv[1], 'r') as config_file:
 
 # configurable parameters
 consolidatedOrderbookDepth = 30
-restartPeriodSeconds = 1*3600
+restartPeriodSeconds = 0.5*3600
 
 def processSnapshot(orderbook,entries):
     updateList = [(float(entry[0]), float(entry[1])) for entry in entries]
