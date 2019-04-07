@@ -66,3 +66,9 @@ networks:
   default:
     external:
       name: crypto
+
+logging:
+        driver: "json-file"
+        options:
+            max-file: 5
+            max-size: 10m
