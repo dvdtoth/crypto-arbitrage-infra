@@ -1,7 +1,16 @@
 version: '3.5'
+
+x-logging:
+  &default-logging
+  driver: json-file
+  options:
+    max-file: '5'
+    max-size: '10m'
+
 services:
   cmc:
     image: poller
+    logging: *default-logging
     build:
       context: .
       dockerfile: Dockerfile
@@ -11,6 +20,7 @@ services:
       CONFIG: cmc-poller/cmc.yml
   coinbasepro:
     image: pollercbpro
+    logging: *default-logging
     build:
       context: .
       dockerfile: Dockerfile
@@ -20,6 +30,7 @@ services:
       CONFIG: exchange-listener/coinbasepro.yml
   binance:
     image: pollerbinance
+    logging: *default-logging
     build:
       context: .
       dockerfile: Dockerfile
@@ -27,17 +38,19 @@ services:
         REQUIREMENTSFILE: requirements-Binance.txt
     environment:
       CONFIG: exchange-listener/binance.yml
-
   bitstamp:
     image: poller
+    logging: *default-logging
     environment:
       CONFIG: exchange-listener/bitstamp.yml
   kraken:
     image: poller
+    logging: *default-logging
     environment:
       CONFIG: exchange-listener/kraken.yml
   poloniex:
     image: pollerpoloniex
+    logging: *default-logging
     build:
       context: .
       dockerfile: Dockerfile
@@ -51,13 +64,16 @@ services:
   #    CONFIG: exchange-poller/poloniex.yml
   oanda:
     image: poller
+    logging: *default-logging
     environment:
       CONFIG: exchange-poller/oanda.yml
   sfox:
     image: poller
+    logging: *default-logging
     environment:
       CONFIG: exchange-listener/sfox.yml
     restart: always
+    
   # bittrex:
   #   image: poller
   #   environment:
