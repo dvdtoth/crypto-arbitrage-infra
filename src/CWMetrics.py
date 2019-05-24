@@ -11,7 +11,7 @@ class CWMetrics:
 
     def __init__(self, exchange):
 
-        self.count_interval = 1
+        self.count_interval = 5
         self.exchange = exchange
 
         self.metric_data = []
@@ -64,7 +64,7 @@ class CWMetrics:
 
         # count samples for 1 second
         if (int(time.time()) - self.count_interval) < self.last_put_time:
-            self.count_samples += 1
+            self.count_samples += 5
         else:
             self.metric_data.append({
                     'MetricName': 'ORDERBOOK_INGEST',
