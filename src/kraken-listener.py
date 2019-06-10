@@ -6,19 +6,20 @@ import sys
 import yaml
 import json
 from CWMetrics import CWMetrics
+import time
+from functools import partial
+from multiprocessing import Process, Event
 
 # Parse config
 with open(sys.argv[1], 'r') as config_file:
     config = yaml.load(config_file)
 
-kafka_producer = KafkaProducer(bootstrap_servers=config['kafka']['address'], value_serializer=lambda v: json.dumps(v).encode('utf-8'))
-
-metrics = CWMetrics(config['exchange']['name'])
 # configurable parameters
 orderbookDepthInSubscription = 1000
 consolidatedOrderbookDepth = 30
+restartPeriodSeconds = 0.5*3600
 
-orderbooks = dict()
+
 
 def processSnapshot(orderbook,entries):
     orderbook.update([(entry[0], float(entry[1])) for entry in entries])
@@ -26,7 +27,7 @@ def processSnapshot(orderbook,entries):
 def getSnapshotTimestamp(orderbookA,orderbookB=[]):
     return max([float(entry[2]) for entry in orderbookA+orderbookB])
 
-def processDelta(orderbook,entries):
+def processDelta(orderbook,entries,metrics):
     for entry in entries:
         if float(entry[1]) > 0:
             orderbook.update([(entry[0], float(entry[1]))])
@@ -52,7 +53,7 @@ def getTop(orderbook, itemCount = 3, reverse=False):
     return entries
 
         
-def krakenMessageHandler(message):
+def krakenMessageHandler(kafka_producer, metrics, orderbooks, message):
     try:
         # Is subscription confirmation message?
         if 'event' in message and 'status' in message and 'channelID' in message and 'pair' in message:
@@ -83,10 +84,10 @@ def krakenMessageHandler(message):
 
             # Prodess deltas
             if 'a' in payload:
-                processDelta(orderbook=orderbooks[channelID]['asks'],entries=payload['a'])
+                processDelta(orderbook=orderbooks[channelID]['asks'],entries=payload['a'], metrics=metrics)
                 orderbooks[channelID]['timestamp']=getSnapshotTimestamp(payload['a'])*1e3
             if 'b' in payload:
-                processDelta(orderbook=orderbooks[channelID]['bids'],entries=payload['b'])
+                processDelta(orderbook=orderbooks[channelID]['bids'],entries=payload['b'], metrics=metrics)
                 orderbooks[channelID]['timestamp']=getSnapshotTimestamp(payload['b'])*1e3
         
         
@@ -128,15 +129,50 @@ def translateNamingFromStandardToKraken(symbolsList,reversed=False):
             translatedList.append(translatedSymbol)
     return translatedList
 
-my_client = client.WssClient()
-my_client.subscribe_public(
-    subscription={
-        'name': 'book',
-        'depth': orderbookDepthInSubscription
-    },
-    #pair=translateNamingFromStandardToKraken(['BTC/USD']),
-    pair=translateNamingFromStandardToKraken(symbolsList=config['exchange']['symbols']),
-    callback=krakenMessageHandler
-)
 
-my_client.start()
+def CryptoArbOrderBookProcess(stopProcessesEvent):
+    try:
+        # Init Kafka producer
+        kafka_producer = KafkaProducer(bootstrap_servers=config['kafka']['address'],
+                                       value_serializer=lambda v: json.dumps(v).encode('utf-8'))
+
+        # Init CloudWatch metrics
+        metrics = CWMetrics(config['exchange']['name'])
+
+        orderbooks = dict()
+
+        my_client = client.WssClient()
+        my_client.subscribe_public(
+            subscription={
+                'name': 'book',
+                'depth': orderbookDepthInSubscription
+            },
+            pair=translateNamingFromStandardToKraken(symbolsList=config['exchange']['symbols']),
+            callback=partial(krakenMessageHandler, kafka_producer, metrics, orderbooks)
+        )
+
+        my_client.start()
+        logger.info('websocket started')
+        stopProcessesEvent.wait()
+        my_client.stop()
+        logger.info('websocket closed')
+
+    except Exception as error:
+        logger.error(type(error).__name__ + " " + str(error.args))
+        metrics.putError()
+
+if __name__ == "__main__":
+    # Keep on restarting the websocket periodically
+    while True:
+        stopProcessesEvent = Event()
+        process = Process(target=CryptoArbOrderBookProcess, args=(stopProcessesEvent,))
+
+        process.daemon = True
+        process.start()
+
+        time.sleep(restartPeriodSeconds)
+
+        stopProcessesEvent.set()
+        process.join()
+
+    logger.info("Poller exited normally. Bye.")
