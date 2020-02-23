@@ -1,4 +1,8 @@
-# Orderbook Poller
+# Crypto Arbitrage Finder - infrastructure and pollers
+
+This repository holds the exchange poller infrastructure codebase for [Crypto Arbitrage Finder](https://github.com/gbarany/crypto-arbitrage-finder/)
+
+## Orderbook Poller
 
 Includes two microservices:
 1. A variable sized proxy mesh
