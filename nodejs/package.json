@@ -12,6 +12,10 @@
   "dependencies": {
     "gdax": "^0.8.0",
     "kafka-node": "^4.0.2",
-    "underscore": "^1.9.1"
+    "underscore": "^1.9.1",
+    "minimist": "^1.2.5"
+  },
+  "resolutions": {
+    "minimist": "^1.2.5"
   }
 }
