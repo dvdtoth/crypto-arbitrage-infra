@@ -9,7 +9,7 @@ chardet==3.0.4
 idna
 kafka-python==1.4.3
 multidict==4.4.2
-pycares==2.3.0
+pycares==4.2.0
 PyYAML>=4.2b1
 requests
 urllib3
