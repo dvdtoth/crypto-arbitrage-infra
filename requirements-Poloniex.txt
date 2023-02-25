@@ -4,7 +4,7 @@ async-timeout==3.0.1
 asyncio==3.4.3
 asynctest==0.12.2
 attrs==18.2.0
-certifi==2018.8.24
+certifi==2022.12.7
 chardet==3.0.4
 idna
 kafka-python==1.4.3
